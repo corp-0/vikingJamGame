@@ -1,0 +1,28 @@
+<Project Sdk="Godot.NET.Sdk/4.6.1">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <WarningsAsErrors>CS9057</WarningsAsErrors>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="3.0.5"  />
+    <PackageReference Include="Chickensoft.Introspection" Version="3.0.2"  />
+    <PackageReference Include="Chickensoft.AutoInject" Version="2.11.1"  PrivateAssets="all" />
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.20.0" />
+    <PackageReference Include="Tomlyn" Version="0.19.0" />
+    
+    <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.2"  PrivateAssets="all" OutputItemType="analyzer" />
+    <PackageReference Include="Chickensoft.AutoInject.Analyzers" Version="2.11.1"  PrivateAssets="all" OutputItemType="analyzer" />
+    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.20.0" PrivateAssets="all" OutputItemType="analyzer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\**\*.cs" />
+    <None Include="src\**\*" Exclude="src\**\*.cs" />
+  </ItemGroup>
+</Project>
