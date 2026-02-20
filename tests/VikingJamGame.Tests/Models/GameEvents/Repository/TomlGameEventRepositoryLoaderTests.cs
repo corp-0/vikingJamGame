@@ -1,4 +1,6 @@
 using VikingJamGame.Repositories.GameEvents;
+using VikingJamGame.Models.GameEvents.Compilation;
+using VikingJamGame.TemplateUtils;
 using VikingJamGame.Tests.TestDoubles;
 
 namespace VikingJamGame.Tests.Models.GameEvents.Repository;
@@ -111,6 +113,45 @@ public sealed class TomlGameEventRepositoryLoaderTests
                         new RecordingCommandRegistry()));
 
             Assert.Contains("missing required key 'Name'", exception.Message);
+        }
+        finally
+        {
+            DeleteDirectory(tempDirectory);
+        }
+    }
+
+    [Fact]
+    public void LoadFromDirectory_RendersTemplatedTextWithProvidedContext()
+    {
+        var tempDirectory = CreateTempDirectory();
+        try
+        {
+            WriteToml(
+                tempDirectory,
+                "templated.toml",
+                """
+                Id = "event.templated"
+                Name = "{Title}"
+                Description = "{He} sees the horizon."
+
+                [[OptionDefinitions]]
+                DisplayText = "Join {him}"
+                ResolutionText = "{His} banner rises."
+                Order = 1
+                """);
+
+            var repository = TomlGameEventRepositoryLoader.LoadFromDirectory(
+                tempDirectory,
+                new RecordingCommandRegistry(),
+                new GameEventTemplateContext(BirthChoice.Boy, "Bjorn", "Sea Wolf"));
+
+            var gameEvent = repository.GetById("event.templated");
+            var option = gameEvent.Options[0];
+
+            Assert.Equal("Sea Wolf", gameEvent.Name);
+            Assert.Equal("He sees the horizon.", gameEvent.Description);
+            Assert.Equal("Join him", option.DisplayText);
+            Assert.Equal("His banner rises.", option.ResolutionText);
         }
         finally
         {

@@ -1,9 +1,20 @@
 [gd_scene format=3 uid="uid://ry3n1k1opkho"]
 
 [ext_resource type="Script" uid="uid://djyal22vnmgsa" path="res://src/Game.cs" id="1_kqvf5"]
-[ext_resource type="PackedScene" uid="uid://d3nymvrvi7cc0" path="res://src/Scenes/MapGeneratorTest.tscn" id="2_lqjwq"]
+[ext_resource type="Script" uid="uid://buafjb3yq21v2" path="res://src/GameLogic/Nodes/GodotSceneSwitcher.cs" id="2_kqvf5"]
+[ext_resource type="PackedScene" uid="uid://dsw16qclrerr3" path="res://src/Scenes/PrologueScene.tscn" id="3_h8hwv"]
+[ext_resource type="PackedScene" uid="uid://dfkuets2nxujx" path="res://src/Scenes/PlayingScene.tscn" id="4_km1yn"]
+[ext_resource type="PackedScene" path="res://src/Scenes/GameOverScene.tscn" id="5_q3fq4"]
 
-[node name="Game" type="Node2D" unique_id=1346216071]
+[node name="Game" type="Node2D" unique_id=1346216071 node_paths=PackedStringArray("SceneSwitcher")]
 script = ExtResource("1_kqvf5")
-InitialScene = ExtResource("2_lqjwq")
+SceneSwitcher = NodePath("GodotSceneSwitcher")
+ForceInitialState = 1
 metadata/_custom_type_script = "uid://djyal22vnmgsa"
+
+[node name="GodotSceneSwitcher" type="Node" parent="." unique_id=1532306172]
+script = ExtResource("2_kqvf5")
+_prologueScene = ExtResource("3_h8hwv")
+_gamingScene = ExtResource("4_km1yn")
+_gameOverScene = ExtResource("5_q3fq4")
+metadata/_custom_type_script = "uid://buafjb3yq21v2"

@@ -4,6 +4,7 @@ using VikingJamGame.Models.GameEvents.Compilation;
 using VikingJamGame.Models.GameEvents.Definitions;
 using VikingJamGame.Models.GameEvents.Runtime;
 using VikingJamGame.Models.GameEvents.Stats;
+using VikingJamGame.TemplateUtils;
 using VikingJamGame.Tests.TestDoubles;
 
 namespace VikingJamGame.Tests.Models.GameEvents.Compilation;
@@ -156,5 +157,40 @@ public sealed class GameEventCompilerTests
             Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition, new RecordingCommandRegistry()));
 
         Assert.Contains("unknown stat 'mystery' in Condition", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_RendersTemplatedTextWithPronouns()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.templated",
+            Name = "{Title}",
+            Description = "{He} sailed into the storm.",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "Follow {him}",
+                    ResolutionText = "{His} legend grows.",
+                    Order = 1
+                }
+            ]
+        };
+
+        var templateContext = new GameEventTemplateContext(
+            BirthChoice.Girl,
+            "Astrid",
+            "Stormborn");
+
+        GameEvent compiled = GameEventCompiler.Compile(
+            definition,
+            new RecordingCommandRegistry(),
+            templateContext);
+
+        Assert.Equal("Stormborn", compiled.Name);
+        Assert.Equal("She sailed into the storm.", compiled.Description);
+        Assert.Equal("Follow her", compiled.Options[0].DisplayText);
+        Assert.Equal("Her legend grows.", compiled.Options[0].ResolutionText);
     }
 }

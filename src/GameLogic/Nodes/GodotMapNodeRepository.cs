@@ -7,7 +7,7 @@ using VikingJamGame.Repositories.Navigation;
 namespace VikingJamGame.GameLogic.Nodes;
 
 [GlobalClass]
-public partial class MapNodeRepositoryNode : Node, IMapNodeRepository
+public partial class GodotMapNodeRepository : Node, IMapNodeRepository
 {
     [Export]
     public string EditorMapNodesResourceDirectory { get; set; } =

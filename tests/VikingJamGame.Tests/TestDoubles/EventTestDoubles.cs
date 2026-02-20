@@ -7,7 +7,7 @@ public sealed class RecordingCommand : IEventCommand
 {
     public int ExecuteCalls { get; private set; }
 
-    public void Execute(GameState state)
+    public void Execute(PlayerInfo playerInfo, GameResources gameResources)
     {
         ExecuteCalls++;
     }

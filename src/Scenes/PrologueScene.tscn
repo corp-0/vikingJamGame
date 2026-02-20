@@ -1,0 +1,217 @@
+[gd_scene format=3 uid="uid://dsw16qclrerr3"]
+
+[ext_resource type="Script" uid="uid://c3055oubjmf1k" path="res://src/GameLogic/PrologueScript.cs" id="1_40gbx"]
+[ext_resource type="Script" uid="uid://b3wc15d3aew0o" path="res://src/GameLogic/PrologueController.cs" id="2_7nka7"]
+
+[sub_resource type="Animation" id="Animation_40gbx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/NarrationText:visible_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_7nka7"]
+resource_name = "show_text"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/NarrationText:visible_ratio")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_06esx"]
+_data = {
+&"RESET": SubResource("Animation_40gbx"),
+&"show_text": SubResource("Animation_7nka7")
+}
+
+[sub_resource type="Animation" id="Animation_06esx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/WaitingIndicator:visible_characters")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-1]
+}
+
+[sub_resource type="Animation" id="Animation_o2jh5"]
+resource_name = "text_waiting"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/WaitingIndicator:visible_characters")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_afard"]
+_data = {
+&"RESET": SubResource("Animation_06esx"),
+&"text_waiting": SubResource("Animation_o2jh5")
+}
+
+[node name="PrologueScene" type="Node2D" unique_id=1169246600 node_paths=PackedStringArray("NarrationLabel", "WaitingIndicator", "NarrationPlayer", "WaitingPlayer", "GenderChoiceContainer", "NameContainer", "StartContainer", "BoyButton", "GirlButton", "NonBinaryButton", "NameInput", "NameContinue", "StartButton")]
+script = ExtResource("1_40gbx")
+NarrationLabel = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/NarrationText")
+WaitingIndicator = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/WaitingIndicator")
+NarrationPlayer = NodePath("NarrationAnimator")
+WaitingPlayer = NodePath("TextWaitingAnimator")
+GenderChoiceContainer = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer")
+NameContainer = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer")
+StartContainer = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/StartContainer")
+BoyButton = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer/Boy")
+GirlButton = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer/Girl")
+NonBinaryButton = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer/Child of Omen")
+NameInput = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer/HBoxContainer/NameInput")
+NameContinue = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer/NameContinuer")
+StartButton = NodePath("CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/StartContainer/StartButton")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=774587214]
+
+[node name="PrologueController" type="Control" parent="CanvasLayer" unique_id=671016325 node_paths=PackedStringArray("PrologueScript")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_7nka7")
+PrologueScript = NodePath("../..")
+metadata/_custom_type_script = "uid://b3wc15d3aew0o"
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/PrologueController" unique_id=1645215271]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PrologueController/ColorRect" unique_id=1567860801]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer" unique_id=1194396849]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="NarrationText" type="Label" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer" unique_id=1614413389]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Here goes the narration text"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer" unique_id=545021000]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+
+[node name="GenderChoiceContainer" type="HBoxContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer" unique_id=1003049821]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 11
+alignment = 1
+
+[node name="Boy" type="Button" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer" unique_id=2097960526]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Boy"
+
+[node name="Girl" type="Button" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer" unique_id=1385564825]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Girl"
+
+[node name="Child of Omen" type="Button" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/GenderChoiceContainer" unique_id=1689231867]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Child of Omen"
+
+[node name="NameInputContainer" type="HBoxContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer" unique_id=382723994]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 29
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer" unique_id=430996526]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 17
+
+[node name="Label" type="Label" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer/HBoxContainer" unique_id=44648782]
+layout_mode = 2
+text = "Name:"
+
+[node name="NameInput" type="LineEdit" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer/HBoxContainer" unique_id=474488601]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="NameContinuer" type="Button" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/NameInputContainer" unique_id=313191953]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+text = "Continue"
+
+[node name="StartContainer" type="HBoxContainer" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer" unique_id=350116936]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="StartButton" type="Button" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer/MarginContainer/StartContainer" unique_id=1426346257]
+layout_mode = 2
+text = "Start"
+
+[node name="WaitingIndicator" type="Label" parent="CanvasLayer/PrologueController/ColorRect/MarginContainer/VBoxContainer" unique_id=870344305]
+layout_mode = 2
+size_flags_vertical = 6
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NarrationAnimator" type="AnimationPlayer" parent="." unique_id=352396314]
+libraries/ = SubResource("AnimationLibrary_06esx")
+
+[node name="TextWaitingAnimator" type="AnimationPlayer" parent="." unique_id=1778269517]
+libraries/ = SubResource("AnimationLibrary_afard")

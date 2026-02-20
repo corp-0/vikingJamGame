@@ -8,7 +8,10 @@ namespace VikingJamGame.Models.GameEvents.Compilation;
 
 public static class GameEventCompiler
 {
-    public static GameEvent Compile(GameEventDefinition definition, ICommandRegistry commands)
+    public static GameEvent Compile(
+        GameEventDefinition definition,
+        ICommandRegistry commands,
+        GameEventTemplateContext? templateContext = null)
     {
         if (string.IsNullOrWhiteSpace(definition.Id))
         {
@@ -16,7 +19,11 @@ public static class GameEventCompiler
         }
 
         var options = definition.OptionDefinitions
-            .Select(optionDefinition => CompileOption(definition.Id, optionDefinition, commands))
+            .Select(optionDefinition => CompileOption(
+                definition.Id,
+                optionDefinition,
+                commands,
+                templateContext))
             .OrderBy(option => option.Order)
             .ToList();
 
@@ -33,8 +40,8 @@ public static class GameEventCompiler
         return new GameEvent
         {
             Id = definition.Id,
-            Name = definition.Name,
-            Description = definition.Description,
+            Name = GameEventDefinitionParser.ParseTemplatedText(definition.Name, templateContext),
+            Description = GameEventDefinitionParser.ParseTemplatedText(definition.Description, templateContext),
             Options = options
         };
     }
@@ -42,7 +49,8 @@ public static class GameEventCompiler
     private static GameEventOption CompileOption(
         string eventId,
         GameEventOptionDefinition optionDefinition,
-        ICommandRegistry commands)
+        ICommandRegistry commands,
+        GameEventTemplateContext? templateContext)
     {
         var requirements = GameEventDefinitionParser.ParsePairs(
             eventId,
@@ -65,8 +73,12 @@ public static class GameEventCompiler
 
         return new GameEventOption
         {
-            DisplayText = optionDefinition.DisplayText,
-            ResolutionText = optionDefinition.ResolutionText,
+            DisplayText = GameEventDefinitionParser.ParseTemplatedText(
+                optionDefinition.DisplayText,
+                templateContext),
+            ResolutionText = GameEventDefinitionParser.ParseTemplatedText(
+                optionDefinition.ResolutionText,
+                templateContext),
             Order = optionDefinition.Order,
             DisplayCosts = optionDefinition.DisplayCosts,
             Requirements = requirements,

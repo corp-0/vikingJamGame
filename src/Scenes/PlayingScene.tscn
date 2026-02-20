@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dfkuets2nxujx"]
+
+[ext_resource type="Script" uid="uid://bfi7u3adqooxv" path="res://src/GameLogic/CameraController.cs" id="1_7w6d0"]
+[ext_resource type="PackedScene" uid="uid://sc75qud55j7" path="res://src/Ui/MainGui.tscn" id="1_kh1ko"]
+[ext_resource type="Texture2D" uid="uid://yiry6jvel2q4" path="res://resources/kenney-cartography/Textures/parchmentBasic.png" id="2_2ekd4"]
+[ext_resource type="Texture2D" uid="uid://bhi4nefpf3gs6" path="res://resources/map-generator-test/starting_village.png" id="3_7w6d0"]
+
+[node name="PlayingScene" type="Node2D" unique_id=1297305378]
+
+[node name="CameraController" type="Node" parent="." unique_id=298045096 node_paths=PackedStringArray("Camera2D", "StartingVillage")]
+script = ExtResource("1_7w6d0")
+Camera2D = NodePath("../Camera2D")
+StartingVillage = NodePath("../NodesRoot/StartingVillage")
+metadata/_custom_type_script = "uid://bfi7u3adqooxv"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=275781661]
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=903734256]
+repeat_size = Vector2(2048, 2048)
+repeat_times = 4
+
+[node name="TextureRect" type="TextureRect" parent="Parallax2D" unique_id=1750842682]
+offset_right = 2048.0
+offset_bottom = 2048.0
+texture = ExtResource("2_2ekd4")
+stretch_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="NodesRoot" type="Node2D" parent="." unique_id=1273918178]
+
+[node name="StartingVillage" type="Sprite2D" parent="NodesRoot" unique_id=578711198]
+position = Vector2(136, 199)
+texture = ExtResource("3_7w6d0")
+
+[node name="MainGui" parent="." unique_id=390611769 instance=ExtResource("1_kh1ko")]

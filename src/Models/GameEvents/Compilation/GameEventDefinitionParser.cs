@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using VikingJamGame.TemplateUtils;
 using VikingJamGame.Models.GameEvents.Commands;
 using VikingJamGame.Models.GameEvents.Stats;
 
@@ -8,6 +9,19 @@ namespace VikingJamGame.Models.GameEvents.Compilation;
 
 internal static class GameEventDefinitionParser
 {
+    public static string ParseTemplatedText(
+        string text,
+        GameEventTemplateContext? templateContext = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(text);
+
+        GameEventTemplateContext context = templateContext ?? GameEventTemplateContext.Default;
+        string name = string.IsNullOrWhiteSpace(context.Name) ? "{Name}" : context.Name;
+        string title = string.IsNullOrWhiteSpace(context.Title) ? "{Title}" : context.Title;
+
+        return Template.Render(text, context.BirthChoice, name, title);
+    }
+
     public static IReadOnlyList<StatAmount> ParsePairs(
         string eventId,
         int order,

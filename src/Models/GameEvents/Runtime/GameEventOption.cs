@@ -18,18 +18,18 @@ public sealed class GameEventOption
     public required IEventCommand Command { get; init; }
     public string? NextEventId { get; init; }
 
-    public bool IsAvailable(GameState state) =>
-        GameStateStats.MeetsAll(state, Requirements) &&
-        GameStateStats.CanPayAll(state, Costs);
+    public bool IsAvailable(PlayerInfo playerInfo, GameResources gameResources) =>
+        GameStateStats.MeetsAll(playerInfo, gameResources, Requirements) &&
+        GameStateStats.CanPayAll(playerInfo, gameResources, Costs);
 
-    public void Execute(GameState state)
+    public void Execute(PlayerInfo playerInfo, GameResources gameResources)
     {
-        if (!GameStateStats.CanPayAll(state, Costs))
+        if (!GameStateStats.CanPayAll(playerInfo, gameResources, Costs))
         {
             throw new InvalidOperationException("Option executed without being affordable.");
         }
 
-        GameStateStats.PayAll(state, Costs);
-        Command.Execute(state);
+        GameStateStats.PayAll(playerInfo, gameResources, Costs);
+        Command.Execute(playerInfo, gameResources);
     }
 }

@@ -7,5 +7,5 @@ public sealed class NoopCommand :
 
     private NoopCommand() { }
 
-    public void Execute(GameState state) { }
+    public void Execute(PlayerInfo playerInfo, GameResources gameResources) { }
 }

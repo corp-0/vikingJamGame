@@ -5,11 +5,14 @@ namespace VikingJamGame.Models.GameEvents.Stats;
 
 internal static class GameStateStats
 {
-    public static bool MeetsAll(GameState state, IReadOnlyList<StatAmount> requirements)
+    public static bool MeetsAll(
+        PlayerInfo playerInfo,
+        GameResources gameResources,
+        IReadOnlyList<StatAmount> requirements)
     {
         foreach (StatAmount requirement in requirements)
         {
-            if (Get(state, requirement.Stat) < requirement.Amount)
+            if (Get(playerInfo, gameResources, requirement.Stat) < requirement.Amount)
             {
                 return false;
             }
@@ -18,11 +21,14 @@ internal static class GameStateStats
         return true;
     }
 
-    public static bool CanPayAll(GameState state, IReadOnlyList<StatAmount> costs)
+    public static bool CanPayAll(
+        PlayerInfo playerInfo,
+        GameResources gameResources,
+        IReadOnlyList<StatAmount> costs)
     {
         foreach (StatAmount cost in costs)
         {
-            if (Get(state, cost.Stat) < cost.Amount)
+            if (Get(playerInfo, gameResources, cost.Stat) < cost.Amount)
             {
                 return false;
             }
@@ -31,26 +37,34 @@ internal static class GameStateStats
         return true;
     }
 
-    public static void PayAll(GameState state, IReadOnlyList<StatAmount> costs)
+    public static void PayAll(
+        PlayerInfo playerInfo,
+        GameResources gameResources,
+        IReadOnlyList<StatAmount> costs)
     {
         foreach (StatAmount cost in costs)
         {
-            Spend(state, cost.Stat, cost.Amount);
+            Spend(playerInfo, gameResources, cost.Stat, cost.Amount);
         }
     }
 
-    public static int Get(GameState state, StatId id) => id switch
+    public static bool IsGameOverReached(PlayerInfo playerInfo, GameResources gameResources)
     {
-        StatId.Population => state.Population,
-        StatId.Food => state.Food,
-        StatId.Gold => state.Gold,
-        StatId.Strength => state.Strength,
-        StatId.Honor => state.Honor,
-        StatId.Feats => state.Feats,
+        return gameResources.Population == 0 || playerInfo.Strength == 0;
+    }
+
+    public static int Get(PlayerInfo playerInfo, GameResources gameResources, StatId id) => id switch
+    {
+        StatId.Population => gameResources.Population,
+        StatId.Food => gameResources.Food,
+        StatId.Gold => gameResources.Gold,
+        StatId.Strength => playerInfo.Strength,
+        StatId.Honor => playerInfo.Honor,
+        StatId.Feats => playerInfo.Feats,
         _ => throw new ArgumentOutOfRangeException(nameof(id))
     };
 
-    private static void Spend(GameState state, StatId id, int amount)
+    private static void Spend(PlayerInfo playerInfo, GameResources gameResources, StatId id, int amount)
     {
         if (amount < 0)
         {
@@ -60,22 +74,22 @@ internal static class GameStateStats
         switch (id)
         {
             case StatId.Population:
-                state.RemovePopulation(amount);
+                gameResources.RemovePopulation(amount);
                 break;
             case StatId.Food:
-                state.SpendFood(amount);
+                gameResources.SpendFood(amount);
                 break;
             case StatId.Gold:
-                state.SpendGold(amount);
+                gameResources.SpendGold(amount);
                 break;
             case StatId.Strength:
-                state.RemoveStrength(amount);
+                playerInfo.RemoveStrength(amount);
                 break;
             case StatId.Honor:
-                state.RemoveHonor(amount);
+                playerInfo.RemoveHonor(amount);
                 break;
             case StatId.Feats:
-                state.RemoveFeats(amount);
+                playerInfo.RemoveFeats(amount);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(id));

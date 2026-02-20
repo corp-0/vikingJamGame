@@ -7,18 +7,14 @@ using VikingJamGame.Models.Navigation;
 namespace VikingJamGame.GameLogic.Nodes;
 
 [GlobalClass]
-public partial class NavigationMapGeneratorNode : Node
+public partial class GodotMapGenerator : Node
 {
     [ExportCategory("Dependencies")]
     [Export] private Button? GenerateButton { get; set; }
-    [Export] private MapNodeRepositoryNode? NodeRepository { get; set; }
+    [Export] private GodotMapNodeRepository? NodeRepository { get; set; }
     [Export] private Node2D? StartingVillage { get; set; }
     [Export] private Node2D? NodesRoot { get; set; }
     [Export(PropertyHint.Dir)] private string NodeArtDirectory { get; set; } = "res://resources/map-generator-test";
-    [Export] private Color ConnectionDotColor { get; set; } = new(0.12f, 0.12f, 0.12f, 0.85f);
-    [Export] private float ConnectionDotRadius { get; set; } = 3.5f;
-    [Export] private float ConnectionDotSpacing { get; set; } = 18f;
-    [Export] private float ConnectionInsetFromNode { get; set; } = 28f;
     
     [ExportCategory("FTL Layout Settings")]
     
@@ -42,7 +38,9 @@ public partial class NavigationMapGeneratorNode : Node
 
     private const string START_KIND = "starting_village";
     private const string END_KIND = "final_boss";
-    private const string CONNECTIONS_LAYER_NAME = "ConnectionsLayer";
+
+    public NavigationMap? CurrentMap => _map;
+    public IReadOnlyDictionary<int, Vector2> NodePositionsById => _nodePositionsById;
 
     private void CreateMap()
     {
@@ -69,7 +67,6 @@ public partial class NavigationMapGeneratorNode : Node
         }
 
         BuildNodeLayout(_map);
-        CreateConnectionLayer(_map, root);
 
         foreach (NavigationMapNode mapNode in _map.NodesById.Values.OrderBy(node => node.Id))
         {
@@ -87,108 +84,6 @@ public partial class NavigationMapGeneratorNode : Node
             visualNode.Position = position;
             root.AddChild(visualNode);
         }
-    }
-
-    private void CreateConnectionLayer(NavigationMap map, Node2D root)
-    {
-        var layer = new Node2D
-        {
-            Name = CONNECTIONS_LAYER_NAME
-        };
-
-        Texture2D dotTexture = CreateDotTexture(ConnectionDotRadius);
-        foreach (NavigationMapNode node in map.NodesById.Values)
-        {
-            if (!_nodePositionsById.TryGetValue(node.Id, out Vector2 from))
-            {
-                continue;
-            }
-
-            foreach (int neighbourId in node.NeighbourIds)
-            {
-                if (!_nodePositionsById.TryGetValue(neighbourId, out Vector2 to))
-                {
-                    continue;
-                }
-
-                AddDotsForConnection(layer, from, to, dotTexture);
-            }
-        }
-
-        root.AddChild(layer);
-    }
-    
-    private void AddDotsForConnection(Node2D layer, Vector2 from, Vector2 to, Texture2D dotTexture)
-    {
-        Vector2 rawDirection = to - from;
-        float rawLength = rawDirection.Length();
-        if (rawLength <= Mathf.Epsilon)
-        {
-            return;
-        }
-
-        Vector2 direction = rawDirection / rawLength;
-        float maxInset = rawLength / 2f - 1f;
-        float inset = Mathf.Min(ConnectionInsetFromNode, Mathf.Max(0f, maxInset));
-        Vector2 start = from + direction * inset;
-        Vector2 end = to - direction * inset;
-        float length = start.DistanceTo(end);
-
-        if (length <= Mathf.Epsilon)
-        {
-            return;
-        }
-
-        float spacing = Mathf.Max(6f, ConnectionDotSpacing);
-        int dotCount = Mathf.Max(2, Mathf.FloorToInt(length / spacing) + 1);
-        for (var i = 0; i < dotCount; i++)
-        {
-            float distance = Mathf.Min(i * spacing, length);
-            Vector2 position = start + direction * distance;
-            layer.AddChild(CreateConnectionDot(dotTexture, position));
-        }
-
-        Vector2 lastDot = start + direction * Mathf.Min((dotCount - 1) * spacing, length);
-        if (lastDot.DistanceTo(end) > spacing * 0.5f)
-        {
-            layer.AddChild(CreateConnectionDot(dotTexture, end));
-        }
-    }
-
-    private Sprite2D CreateConnectionDot(Texture2D dotTexture, Vector2 position)
-    {
-        return new Sprite2D
-        {
-            Texture = dotTexture,
-            Centered = true,
-            Position = position,
-            Modulate = ConnectionDotColor
-        };
-    }
-
-    private static Texture2D CreateDotTexture(float radius)
-    {
-        float safeRadius = Mathf.Max(1f, radius);
-        int diameter = Mathf.Max(2, Mathf.CeilToInt(safeRadius * 2f));
-        Image image = Image.CreateEmpty(diameter, diameter, false, Image.Format.Rgba8);
-
-        Vector2 center = new((diameter - 1) * 0.5f, (diameter - 1) * 0.5f);
-        float radiusSquared = safeRadius * safeRadius;
-
-        for (var y = 0; y < diameter; y++)
-        {
-            for (var x = 0; x < diameter; x++)
-            {
-                Vector2 delta = new(x, y);
-                delta -= center;
-                image.SetPixel(
-                    x,
-                    y,
-                    delta.LengthSquared() <= radiusSquared ? Colors.White : Colors.Transparent);
-            }
-        }
-
-        return ImageTexture.CreateFromImage(image);
     }
 
     private void BuildNodeLayout(NavigationMap map)
@@ -517,7 +412,7 @@ public partial class NavigationMapGeneratorNode : Node
 
     public void Generate()
     {
-        MapNodeRepositoryNode repository = RequireNodeRepository();
+        GodotMapNodeRepository repository = RequireNodeRepository();
         _definitionsByKind = repository.All
             .ToDictionary(definition => definition.Kind, definition => definition, StringComparer.Ordinal);
 
@@ -531,9 +426,29 @@ public partial class NavigationMapGeneratorNode : Node
         CreateMap();
     }
 
+    public bool TryGetRenderContext(
+        out NavigationMap map,
+        out Node2D nodesRoot,
+        out IReadOnlyDictionary<int, Vector2> nodePositionsById)
+    {
+        map = null!;
+        nodesRoot = null!;
+        nodePositionsById = _nodePositionsById;
+
+        if (_map is null || NodesRoot is null)
+        {
+            return false;
+        }
+
+        map = _map;
+        nodesRoot = NodesRoot;
+        nodePositionsById = _nodePositionsById;
+        return true;
+    }
+
     public override void _Ready()
     {
-        MapNodeRepositoryNode repository = RequireNodeRepository();
+        GodotMapNodeRepository repository = RequireNodeRepository();
         repository.Reload();
 
         if (GenerateButton is not null)
@@ -552,7 +467,7 @@ public partial class NavigationMapGeneratorNode : Node
         }
     }
 
-    private MapNodeRepositoryNode RequireNodeRepository() => 
+    private GodotMapNodeRepository RequireNodeRepository() => 
         NodeRepository
         ?? throw new InvalidOperationException($"{nameof(NodeRepository)} must be assigned.");
 

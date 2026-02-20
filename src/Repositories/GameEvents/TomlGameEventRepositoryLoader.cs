@@ -16,10 +16,15 @@ public static class TomlGameEventRepositoryLoader
 {
     public const string DEFAULT_EVENTS_DIRECTORY = "src/definitions/events";
 
-    public static IGameEventRepository LoadFromDefaultDirectory(ICommandRegistry commands) =>
-        LoadFromDirectory(DEFAULT_EVENTS_DIRECTORY, commands);
+    public static IGameEventRepository LoadFromDefaultDirectory(
+        ICommandRegistry commands,
+        GameEventTemplateContext? templateContext = null) =>
+        LoadFromDirectory(DEFAULT_EVENTS_DIRECTORY, commands, templateContext);
 
-    public static IGameEventRepository LoadFromDirectory(string directoryPath, ICommandRegistry commands)
+    public static IGameEventRepository LoadFromDirectory(
+        string directoryPath,
+        ICommandRegistry commands,
+        GameEventTemplateContext? templateContext = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
         ArgumentNullException.ThrowIfNull(commands);
@@ -38,7 +43,7 @@ public static class TomlGameEventRepositoryLoader
         foreach (var eventFilePath in eventFiles)
         {
             var definition = ReadDefinition(eventFilePath);
-            var compiledEvent = GameEventCompiler.Compile(definition, commands);
+            var compiledEvent = GameEventCompiler.Compile(definition, commands, templateContext);
             events.Add(compiledEvent);
         }
 

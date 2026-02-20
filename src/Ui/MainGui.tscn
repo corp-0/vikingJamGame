@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://sc75qud55j7"]
+
+[ext_resource type="Script" uid="uid://6j05qwx2t0tw" path="res://src/GameLogic/MainGui.cs" id="1_elvp5"]
+[ext_resource type="Texture2D" uid="uid://d4bauo1vwnj4q" path="res://resources/ui-icons/two-shadows.png" id="1_ictxw"]
+[ext_resource type="Texture2D" uid="uid://b161h3o84x44s" path="res://resources/ui-icons/grain.png" id="3_1736x"]
+[ext_resource type="Texture2D" uid="uid://ctyyr1w0dl4k5" path="res://resources/ui-icons/coins-pile.png" id="4_knk56"]
+
+[node name="MainGui" type="CanvasLayer" unique_id=390611769 node_paths=PackedStringArray("PopulationLabel", "FoodLabel", "CoinLabel")]
+script = ExtResource("1_elvp5")
+PopulationLabel = NodePath("VBoxContainer/ColorRect/MarginContainer/HBoxContainer/PopulationContainer/PopulationLabel")
+FoodLabel = NodePath("VBoxContainer/ColorRect/MarginContainer/HBoxContainer/FoodContainer/FoodLabel")
+CoinLabel = NodePath("VBoxContainer/ColorRect/MarginContainer/HBoxContainer/CoinContainer/CoinLabel")
+metadata/_custom_type_script = "uid://6j05qwx2t0tw"
+
+[node name="Control" type="Control" parent="." unique_id=356889234]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1121216699]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer" unique_id=579516120]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.2901961, 0.23137255, 0.17254902, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ColorRect" unique_id=1242192123]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ColorRect/MarginContainer" unique_id=259586]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PopulationContainer" type="HBoxContainer" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer" unique_id=1300091786]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/PopulationContainer" unique_id=1703570017]
+layout_mode = 2
+texture = ExtResource("1_ictxw")
+
+[node name="PopulationLabel" type="Label" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/PopulationContainer" unique_id=175536226]
+layout_mode = 2
+text = "142"
+
+[node name="FoodContainer" type="HBoxContainer" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer" unique_id=927912703]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/FoodContainer" unique_id=1038229816]
+layout_mode = 2
+texture = ExtResource("3_1736x")
+
+[node name="FoodLabel" type="Label" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/FoodContainer" unique_id=1085179522]
+layout_mode = 2
+text = "142"
+
+[node name="CoinContainer" type="HBoxContainer" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer" unique_id=593320268]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/CoinContainer" unique_id=1456873226]
+layout_mode = 2
+texture = ExtResource("4_knk56")
+
+[node name="CoinLabel" type="Label" parent="VBoxContainer/ColorRect/MarginContainer/HBoxContainer/CoinContainer" unique_id=1937801904]
+layout_mode = 2
+text = "142"

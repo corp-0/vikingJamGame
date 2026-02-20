@@ -19,6 +19,15 @@ run/main_scene="uid://ry3n1k1opkho"
 config/features=PackedStringArray("4.6", "C#")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="VikingJamGame"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+textures/default_filters/use_nearest_mipmap_filter=true

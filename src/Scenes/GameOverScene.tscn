@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[node name="GameOverScene" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 416.0
+offset_bottom = 48.0
+text = "Game Over Scene (placeholder)"
