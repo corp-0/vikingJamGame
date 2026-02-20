@@ -1,4 +1,6 @@
 ﻿Kind = "ocean"
+Name = "Open Sea"
+Description = "Endless waves stretch to the horizon. The wind carries you forward, or astray."
 Art = "ocean.png"
 
 EventsPool = [

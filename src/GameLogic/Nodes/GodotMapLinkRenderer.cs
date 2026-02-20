@@ -166,6 +166,46 @@ public partial class GodotMapLinkRenderer : Node
         nodesRoot.AddChild(layer);
     }
 
+    public void RenderConnectionsBetweenVisibleNodes(IReadOnlySet<int> visibleNodeIds)
+    {
+        if (!TryGetRenderContext(out NavigationMap map, out Node2D nodesRoot, out IReadOnlyDictionary<int, Vector2> nodePositionsById))
+        {
+            return;
+        }
+
+        RemoveExistingConnectionsLayer(nodesRoot);
+
+        var layer = new Node2D
+        {
+            Name = ConnectionsLayerName
+        };
+
+        Texture2D dotTexture = CreateDotTexture(ForwardConnectionDotRadius);
+
+        foreach (int nodeId in visibleNodeIds)
+        {
+            if (!map.NodesById.TryGetValue(nodeId, out NavigationMapNode? node)) continue;
+            if (!nodePositionsById.TryGetValue(nodeId, out Vector2 from)) continue;
+
+            foreach (int neighbourId in node.NeighbourIds)
+            {
+                if (!visibleNodeIds.Contains(neighbourId)) continue;
+                if (!nodePositionsById.TryGetValue(neighbourId, out Vector2 to)) continue;
+
+                AddDotsForConnection(
+                    layer,
+                    from,
+                    to,
+                    dotTexture,
+                    ForwardConnectionDotColor,
+                    ForwardConnectionDotSpacing,
+                    ForwardConnectionInsetFromNode);
+            }
+        }
+
+        nodesRoot.AddChild(layer);
+    }
+
     private bool TryGetRenderContext(
         out NavigationMap map,
         out Node2D nodesRoot,

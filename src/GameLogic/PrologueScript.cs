@@ -148,15 +148,6 @@ public partial class PrologueScript : Node2D
     public void SetCharacterName(string name) =>
         _name = string.IsNullOrWhiteSpace(name) ? "{Name}" : name.Trim();
 
-    public void SetCharacterTitle(string title) =>
-        _title = string.IsNullOrWhiteSpace(title) ? "{Title}" : title.Trim();
-
-    public void SetCharacterNameAndTitle(string name, string title)
-    {
-        SetCharacterName(name);
-        SetCharacterTitle(title);
-    }
-
     private bool CanAdvance()
     {
         if (_currentLine is 3 or 4 or 5) return false;

@@ -1,4 +1,6 @@
 Kind = "swamps"
+Name = "Swamps"
+Description = "Murky bogs that slow your advance. Disease and ambush are constant threats."
 Art = "swamps.png"
 EventsPool = ["test_event"]
 

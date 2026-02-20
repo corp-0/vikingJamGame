@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chickensoft.AutoInject;
+using Chickensoft.Introspection;
 using Godot;
 using VikingJamGame.Models.Navigation;
 
 namespace VikingJamGame.GameLogic.Nodes;
 
-[GlobalClass]
+[GlobalClass][Meta(typeof(IAutoNode))]
 public partial class GodotMapGenerator : Node
 {
+
     [ExportCategory("Dependencies")]
     [Export] private Button? GenerateButton { get; set; }
-    [Export] private GodotMapNodeRepository? NodeRepository { get; set; }
     [Export] private Node2D? StartingVillage { get; set; }
     [Export] private Node2D? NodesRoot { get; set; }
     [Export(PropertyHint.Dir)] private string NodeArtDirectory { get; set; } = "res://resources/map-generator-test";
+    [Export] private PackedScene MapNodeScene { get; set; } = null!;
     
     [ExportCategory("FTL Layout Settings")]
     
@@ -30,11 +33,14 @@ public partial class GodotMapGenerator : Node
     [Export] private int PeakFrontierWidth { get; set; } = 6;
     [Export] private int MaxMergeDistance { get; set; } = 3;
 
+    [Dependency] private GodotMapNodeRepository MapRepository => this.DependOn<GodotMapNodeRepository>();
+
     private readonly NavigationMapGenerator _generator = new();
     private NavigationMap? _map;
     private IReadOnlyDictionary<string, MapNodeDefinition> _definitionsByKind =
         new Dictionary<string, MapNodeDefinition>(StringComparer.Ordinal);
     private readonly Dictionary<int, Vector2> _nodePositionsById = [];
+    private readonly Dictionary<int, Node2D> _visualNodesById = [];
 
     private const string START_KIND = "starting_village";
     private const string END_KIND = "final_boss";
@@ -53,8 +59,10 @@ public partial class GodotMapGenerator : Node
         Node2D startNode = RequireStartingVillage();
 
         _nodePositionsById.Clear();
+        _visualNodesById.Clear();
         Vector2 startPosition = root.ToLocal(startNode.GlobalPosition);
         _nodePositionsById[_map.StartNodeId] = startPosition;
+        _visualNodesById[_map.StartNodeId] = startNode;
 
         foreach (Node child in root.GetChildren())
         {
@@ -80,9 +88,10 @@ public partial class GodotMapGenerator : Node
                 continue;
             }
 
-            Sprite2D visualNode = CreateVisualNode(mapNode);
+            GodotMapNode visualNode = CreateVisualNode(mapNode);
             visualNode.Position = position;
             root.AddChild(visualNode);
+            _visualNodesById[mapNode.Id] = visualNode;
         }
     }
 
@@ -230,7 +239,7 @@ public partial class GodotMapGenerator : Node
             }
         }
     }
-
+    
     private List<int> OrderLayerNodes(
         IReadOnlyList<int> layerNodes,
         int depth,
@@ -346,50 +355,23 @@ public partial class GodotMapGenerator : Node
         return scale;
     }
 
-    private static float[] BuildNeighbourAngles(float baseAngleRadians, int neighbourCount)
+    private GodotMapNode CreateVisualNode(NavigationMapNode mapNode)
     {
-        if (neighbourCount <= 0)
-        {
-            return [];
-        }
+        var node = MapNodeScene.Instantiate<GodotMapNode>();
+        node.Name = $"MapNode_{mapNode.Id}_{mapNode.Kind}";
 
-        if (neighbourCount == 1)
-        {
-            return [baseAngleRadians];
-        }
-
-        float spreadDegrees = Mathf.Min(170f, 34f + neighbourCount * 24f);
-        float spreadRadians = Mathf.DegToRad(spreadDegrees);
-        float firstAngle = baseAngleRadians - spreadRadians / 2f;
-        float step = spreadRadians / (neighbourCount - 1);
-
-        var angles = new float[neighbourCount];
-        for (var i = 0; i < neighbourCount; i++)
-        {
-            angles[i] = firstAngle + step * i;
-        }
-
-        return angles;
-    }
-    
-    private Sprite2D CreateVisualNode(NavigationMapNode mapNode)
-    {
-        var sprite = new Sprite2D
-        {
-            Name = $"MapNode_{mapNode.Id}_{mapNode.Kind}",
-            Centered = true
-        };
-
+        Texture2D? texture = null;
         if (_definitionsByKind.TryGetValue(mapNode.Kind, out MapNodeDefinition? definition))
         {
-            sprite.Texture = LoadTextureForDefinition(definition);
+            texture = LoadTextureForDefinition(definition);
         }
         else
         {
             GD.PushWarning($"No map definition found for node kind '{mapNode.Kind}'.");
         }
 
-        return sprite;
+        node.Initialize(mapNode, texture);
+        return node;
     }
 
     private Texture2D? LoadTextureForDefinition(MapNodeDefinition definition)
@@ -412,8 +394,7 @@ public partial class GodotMapGenerator : Node
 
     public void Generate()
     {
-        GodotMapNodeRepository repository = RequireNodeRepository();
-        _definitionsByKind = repository.All
+        _definitionsByKind = MapRepository.All
             .ToDictionary(definition => definition.Kind, definition => definition, StringComparer.Ordinal);
 
         var parameters = new NavigationMapGenerationParameters
@@ -446,10 +427,24 @@ public partial class GodotMapGenerator : Node
         return true;
     }
 
-    public override void _Ready()
+    public void SetNodeVisibility(IReadOnlySet<int> visibleNodeIds, IReadOnlySet<int>? knownNodeIds = null)
     {
-        GodotMapNodeRepository repository = RequireNodeRepository();
-        repository.Reload();
+        IReadOnlySet<int> effectiveKnownNodeIds = knownNodeIds ?? visibleNodeIds;
+
+        foreach (var (nodeId, visualNode) in _visualNodesById)
+        {
+            visualNode.Visible = visibleNodeIds.Contains(nodeId);
+
+            if (visualNode is GodotMapNode mapNode)
+            {
+                mapNode.SetIdentityKnown(effectiveKnownNodeIds.Contains(nodeId));
+            }
+        }
+    }
+
+    public void OnResolved()
+    {
+        MapRepository.Reload();
 
         if (GenerateButton is not null)
         {
@@ -458,7 +453,7 @@ public partial class GodotMapGenerator : Node
 
         Generate();
     }
-
+    
     public override void _ExitTree()
     {
         if (GenerateButton is not null)
@@ -466,11 +461,7 @@ public partial class GodotMapGenerator : Node
             GenerateButton.Pressed -= Generate;
         }
     }
-
-    private GodotMapNodeRepository RequireNodeRepository() => 
-        NodeRepository
-        ?? throw new InvalidOperationException($"{nameof(NodeRepository)} must be assigned.");
-
+    
     private Node2D RequireStartingVillage() => 
         StartingVillage
         ?? throw new InvalidOperationException($"{nameof(StartingVillage)} must be assigned.");
@@ -478,5 +469,6 @@ public partial class GodotMapGenerator : Node
     private Node2D RequireNodesRoot() => 
         NodesRoot
         ?? throw new InvalidOperationException($"{nameof(NodesRoot)} must be assigned.");
-
+    
+    public override void _Notification(int what) => this.Notify(what);
 }

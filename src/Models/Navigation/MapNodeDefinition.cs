@@ -5,6 +5,8 @@ namespace VikingJamGame.Models.Navigation;
 public record MapNodeDefinition
 {
     public string Kind { get; init; } = "";
+    public required string Name { get; init; }
+    public required string Description { get; init; }
     // kind of node and weight, from 0 to 1
     public Dictionary<string, float> PossibleNeighbours { get; init; } = new();
 

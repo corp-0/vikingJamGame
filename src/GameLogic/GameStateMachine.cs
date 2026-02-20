@@ -44,6 +44,11 @@ public partial class GameStateMachine: LogicBlock<GameStateMachine.State>
             public Transition On(in Input.TriggerGameOver input) => To<GameOver>();
         }
 
+        public record Victory : State, IGet<Input.Restart>
+        {
+            public Transition On(in Input.Restart input) => To<Prologue>();
+        }
+
         public record GameOver : State, IGet<Input.Restart>
         {
             public Transition On(in Input.Restart input) => To<Prologue>();

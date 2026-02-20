@@ -1,3 +1,5 @@
 ﻿Kind = "final_boss"
+Name = "The Serpent's Lair"
+Description = "The end of your journey. The great serpent Jormungandr awaits."
 Art = "final_boss.png"
 ForcedFirstEvent = "final_boss"

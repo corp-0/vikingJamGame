@@ -1,4 +1,6 @@
 Kind = "caves"
+Name = "Caves"
+Description = "Dark tunnels carved into the mountainside. Treasures and terrors await within."
 Art = "caves.png"
 EventsPool = ["test_event"]
 

@@ -22,6 +22,7 @@ public partial class GodotNavigationSession : Node
     public bool IsInitialized => _isInitialized;
     public int CurrentNodeId => RequireSession().CurrentNodeId;
     public NavigationMapNode CurrentNode => RequireSession().CurrentNode;
+    public IReadOnlySet<int> VisitedNodeIds => RequireSession().VisitedNodeIds;
 
     public IReadOnlyList<int> GetForwardNodeIds() => RequireSession().GetForwardNodeIds();
     public IReadOnlyList<int> GetBackwardNodeIds() => RequireSession().GetBackwardNodeIds();

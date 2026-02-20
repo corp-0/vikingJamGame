@@ -10,6 +10,8 @@ public sealed class NavigationSession
     private readonly IReadOnlyDictionary<int, IReadOnlyList<int>> _parentIdsByNodeId;
 
     public int CurrentNodeId { get; private set; }
+    public IReadOnlySet<int> VisitedNodeIds => _visitedNodeIds;
+    private readonly HashSet<int> _visitedNodeIds = [];
 
     public NavigationMapNode CurrentNode => _map.NodesById[CurrentNodeId];
 
@@ -28,6 +30,7 @@ public sealed class NavigationSession
         }
 
         CurrentNodeId = initialNodeId;
+        _visitedNodeIds.Add(initialNodeId);
         _parentIdsByNodeId = BuildParentIdsByNodeId(_map);
     }
 
@@ -78,6 +81,7 @@ public sealed class NavigationSession
         }
 
         CurrentNodeId = nodeId;
+        _visitedNodeIds.Add(nodeId);
         return true;
     }
 

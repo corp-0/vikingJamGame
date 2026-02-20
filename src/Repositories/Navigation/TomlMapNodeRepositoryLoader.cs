@@ -64,6 +64,8 @@ public static class TomlMapNodeRepositoryLoader
         return new MapNodeDefinition
         {
             Kind = GetRequiredString(root, nameof(MapNodeDefinition.Kind), filePath),
+            Name = GetRequiredString(root, nameof(MapNodeDefinition.Name), filePath),
+            Description = GetRequiredString(root, nameof(MapNodeDefinition.Description), filePath),
             PossibleNeighbours = GetPossibleNeighbours(root, nameof(MapNodeDefinition.PossibleNeighbours), filePath),
             ForcedFirstEvent = GetOptionalString(root, nameof(MapNodeDefinition.ForcedFirstEvent), filePath),
             EventsPool = GetOptionalStringArray(root, nameof(MapNodeDefinition.EventsPool), filePath),

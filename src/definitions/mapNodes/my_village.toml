@@ -1,4 +1,6 @@
 Kind = "starting_village"
+Name = "Home Village"
+Description = "Your village on the fjord. The longships are ready to sail."
 Art = "starting_village.png"
 ForcedFirstEvent = "starting_event"
 EventsPool = ["test_event"]

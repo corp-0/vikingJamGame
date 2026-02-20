@@ -1,4 +1,6 @@
 Kind = "monastery"
+Name = "Monastery"
+Description = "A stone abbey perched on a hill."
 Art = "monastery.png"
 EventsPool = ["test_event"]
 

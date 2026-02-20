@@ -1,4 +1,6 @@
 Kind = "village"
+Name = "Village"
+Description = "A small settlement."
 Art = "village.png"
 EventsPool = ["test_event"]
 
