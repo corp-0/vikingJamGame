@@ -18,6 +18,8 @@ public partial class GameLoopMachine : LogicBlock<GameLoopMachine.State>
     {
         public readonly record struct DestinationSelected(int NodeId);
         public readonly record struct EventResolved(EventResults Results);
+        public readonly record struct MovementCostApplied;
+        public readonly record struct LosingConditionEvaluated;
     }
 
     public abstract partial record State : StateLogic<State>

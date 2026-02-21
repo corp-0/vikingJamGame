@@ -1,9 +1,131 @@
 [gd_scene format=3 uid="uid://bu0p7jnr4e6yg"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_1ves8"]
-font_size = 40
+[ext_resource type="Script" uid="uid://c6cy8iovr2qe6" path="res://src/GameLogic/GameOverScript.cs" id="1_qlr0o"]
+[ext_resource type="Texture2D" uid="uid://chjkdy5itoekb" path="res://resources/kenney-rpg-ui-pack/PNG/panel_brown.png" id="2_panel"]
+[ext_resource type="Texture2D" uid="uid://dofolw0orvdvd" path="res://resources/kenney-rpg-ui-pack/PNG/panelInset_brown.png" id="3_inset"]
+[ext_resource type="Texture2D" uid="uid://mvnqqet4dyjw" path="res://resources/kenney-rpg-ui-pack/PNG/buttonLong_brown.png" id="4_btn_normal"]
+[ext_resource type="Texture2D" uid="uid://bmkvi4oj66dc3" path="res://resources/kenney-rpg-ui-pack/PNG/buttonLong_brown_pressed.png" id="5_btn_pressed"]
+[ext_resource type="LabelSettings" uid="uid://ca6pevgijmwbv" path="res://resources/gameover_text.tres" id="5_xl7cd"]
+[ext_resource type="Texture2D" uid="uid://b161h3o84x44s" path="res://resources/ui-icons/grain.png" id="6_grain"]
 
-[node name="GameOverScene" type="Node2D" unique_id=1914835219]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_main_panel"]
+content_margin_left = 22.0
+content_margin_top = 18.0
+content_margin_right = 22.0
+content_margin_bottom = 18.0
+texture = ExtResource("2_panel")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.66, 0.52, 0.36, 0.96)
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 46
+font_color = Color(1, 0.92, 0.72, 1)
+shadow_color = Color(0.08, 0.05, 0.02, 0.95)
+shadow_offset = Vector2(2, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_separator"]
+content_margin_top = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.89, 0.75, 0.48, 0.7)
+
+[sub_resource type="LabelSettings" id="LabelSettings_section_title"]
+font_size = 20
+font_color = Color(0.96, 0.88, 0.68, 1)
+shadow_color = Color(0.05, 0.03, 0.01, 0.9)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_section_panel"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+texture = ExtResource("3_inset")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+modulate_color = Color(0.7, 0.58, 0.4, 0.88)
+
+[sub_resource type="LabelSettings" id="LabelSettings_body"]
+font_size = 18
+font_color = Color(0.91, 0.82, 0.66, 1)
+shadow_color = Color(0.05, 0.03, 0.01, 0.8)
+
+[sub_resource type="LabelSettings" id="LabelSettings_stat_name"]
+font_size = 18
+font_color = Color(0.95, 0.86, 0.67, 0.95)
+shadow_color = Color(0.03, 0.02, 0.01, 0.7)
+
+[sub_resource type="LabelSettings" id="LabelSettings_stat_value"]
+font_size = 20
+font_color = Color(1, 0.96, 0.82, 1)
+shadow_color = Color(0.03, 0.02, 0.01, 0.85)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+content_margin_left = 26.0
+content_margin_top = 11.0
+content_margin_right = 26.0
+content_margin_bottom = 15.0
+texture = ExtResource("4_btn_normal")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1, 1, 1, 0.98)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+content_margin_left = 26.0
+content_margin_top = 13.0
+content_margin_right = 26.0
+content_margin_bottom = 13.0
+texture = ExtResource("5_btn_pressed")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+content_margin_left = 26.0
+content_margin_top = 11.0
+content_margin_right = 26.0
+content_margin_bottom = 15.0
+texture = ExtResource("4_btn_normal")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.15, 1.12, 1.04, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_focus"]
+content_margin_left = 26.0
+content_margin_top = 11.0
+content_margin_right = 26.0
+content_margin_bottom = 15.0
+texture = ExtResource("4_btn_normal")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.08, 1.05, 0.98, 1)
+
+[node name="GameOverScene" type="Node2D" unique_id=607119022 node_paths=PackedStringArray("RestartButton", "DefeatContainer", "VictoryContainer", "DefeatReasonsContainer", "TitleLabel", "Strength", "Honor", "Feats", "Population", "Food", "Gold")]
+script = ExtResource("1_qlr0o")
+RestartButton = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/Button")
+DefeatContainer = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer")
+VictoryContainer = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/VictoryNarrationContainer")
+DefeatReasonsContainer = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer/ReasonsPanel/MarginContainer/ReasonsList")
+TitleLabel = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/VictoryDefeatLabel")
+ReasonsStyle = ExtResource("5_xl7cd")
+Strength = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer/StrValue")
+Honor = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer/HonorValue")
+Feats = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer/FeatsValue")
+Population = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2/PopValue")
+Food = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2/FoodValue")
+Gold = NodePath("CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2/GoldValue")
+metadata/_custom_type_script = "uid://c6cy8iovr2qe6"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1825130843]
 
@@ -13,7 +135,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.03, 0.015, 0.01, 1)
+
+[node name="GrainOverlay" type="TextureRect" parent="CanvasLayer/ColorRect" unique_id=682016206]
+modulate = Color(1, 1, 1, 0.08)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_grain")
+expand_mode = 1
+stretch_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect" unique_id=812426799]
 layout_mode = 1
@@ -22,129 +157,223 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer" unique_id=354951909]
+[node name="CenterContainer" type="ScrollContainer" parent="CanvasLayer/ColorRect/MarginContainer" unique_id=1211910378]
 layout_mode = 2
-theme_override_constants/separation = 40
+size_flags_horizontal = 3
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
 
-[node name="VictoryDefeatLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=267934205]
+[node name="MainPanel" type="PanelContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer" unique_id=1320223280]
 layout_mode = 2
-text = "Victory|Defeat"
-label_settings = SubResource("LabelSettings_1ves8")
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_main_panel")
+
+[node name="MainMargin" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel" unique_id=1975437513]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin" unique_id=354951909]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="VictoryDefeatLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=267934205]
+layout_mode = 2
+text = "VICTORY"
+label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DefeatReasonContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=214853225]
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=1985199197]
 layout_mode = 2
+theme_override_constants/separation = 6
+theme_override_styles/separator = SubResource("StyleBoxFlat_separator")
 
-[node name="Label2" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer" unique_id=1680654803]
+[node name="DefeatReasonContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=214853225]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label2" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer" unique_id=1680654803]
 layout_mode = 2
 text = "You didn't manage to fulfill your destiny because:"
+label_settings = SubResource("LabelSettings_section_title")
+horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer" unique_id=1691185935]
+[node name="ReasonsPanel" type="PanelContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer" unique_id=1740751413]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_styles/panel = SubResource("StyleBoxTexture_section_panel")
 
-[node name="ReasonsList" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer" unique_id=1491416148]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer/ReasonsPanel" unique_id=1691185935]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 14
+
+[node name="ReasonsList" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/DefeatReasonContainer/ReasonsPanel/MarginContainer" unique_id=1491416148]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
-alignment = 1
+theme_override_constants/separation = 4
 
-[node name="ExampleLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=473145001]
-layout_mode = 2
-text = "- You lost all your people"
-
-[node name="ExampleLabel2" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=675593510]
-layout_mode = 2
-text = "- You had no more food to continue"
-
-[node name="ExampleLabel3" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=724183962]
-layout_mode = 2
-text = "- You died in battle"
-
-[node name="ExampleLabel4" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=1252146823]
-layout_mode = 2
-text = "- You were dishonored"
-
-[node name="VictoryNarrationContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=423859365]
+[node name="VictoryNarrationContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=423859365]
+visible = false
 layout_mode = 2
 
-[node name="WinNarrationLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/VictoryNarrationContainer" unique_id=214283796]
+[node name="NarrationPanel" type="PanelContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/VictoryNarrationContainer" unique_id=1408555673]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_section_panel")
+
+[node name="NarrationMargin" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/VictoryNarrationContainer/NarrationPanel" unique_id=1611357848]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 14
+
+[node name="WinNarrationLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/VictoryNarrationContainer/NarrationPanel/NarrationMargin" unique_id=214283796]
 layout_mode = 2
 text = "You managed to win, wow you are so cool."
+label_settings = SubResource("LabelSettings_body")
+horizontal_alignment = 1
+autowrap_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=607720362]
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=607720362]
 layout_mode = 2
-text = "Your final Stats:"
+text = "Your final stats:"
+label_settings = SubResource("LabelSettings_section_title")
+horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=6134832]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=6134832]
 layout_mode = 2
-theme_override_constants/separation = 34
+theme_override_constants/separation = 14
 alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1879449106]
+[node name="LeftStatsPanel" type="PanelContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer" unique_id=539997272]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_section_panel")
+
+[node name="LeftStatsMargin" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel" unique_id=1821843474]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin" unique_id=1879449106]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 8
 columns = 2
 
-[node name="StrLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1774042085]
+[node name="StrLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=1774042085]
 layout_mode = 2
 text = "Strength"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="StrValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1471703442]
+[node name="StrValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=1471703442]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="HonorLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1313919884]
+[node name="HonorLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=1313919884]
 layout_mode = 2
 text = "Honor"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="HonorValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1310877103]
+[node name="HonorValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=1310877103]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="FeatsLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=298272973]
+[node name="FeatsLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=298272973]
 layout_mode = 2
-text = "Strength"
+text = "Feats"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="FeatsValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1536280577]
+[node name="FeatsValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/LeftStatsPanel/LeftStatsMargin/GridContainer" unique_id=1536280577]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="GridContainer2" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1292367993]
+[node name="RightStatsPanel" type="PanelContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer" unique_id=1289901570]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_section_panel")
+
+[node name="RightStatsMargin" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel" unique_id=334306369]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="GridContainer2" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin" unique_id=1292367993]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 8
 columns = 2
 
-[node name="PopLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=493232593]
+[node name="PopLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=493232593]
 layout_mode = 2
 text = "Population"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="PopValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=1790959639]
+[node name="PopValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=1790959639]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="FoodLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=2138453968]
+[node name="FoodLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=2138453968]
 layout_mode = 2
 text = "Food"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="FoodValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=161621766]
+[node name="FoodValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=161621766]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="GoldLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=1683705494]
+[node name="GoldLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=1683705494]
 layout_mode = 2
 text = "Gold"
+label_settings = SubResource("LabelSettings_stat_name")
 
-[node name="GoldValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=249018520]
+[node name="GoldValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer/HBoxContainer/RightStatsPanel/RightStatsMargin/GridContainer2" unique_id=249018520]
 layout_mode = 2
 text = "100"
+label_settings = SubResource("LabelSettings_stat_value")
+horizontal_alignment = 2
 
-[node name="Button" type="Button" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=1657454516]
+[node name="HSeparator2" type="HSeparator" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=1733130536]
 layout_mode = 2
+theme_override_constants/separation = 6
+theme_override_styles/separator = SubResource("StyleBoxFlat_separator")
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect/MarginContainer/CenterContainer/MainPanel/MainMargin/VBoxContainer" unique_id=1657454516]
+custom_minimum_size = Vector2(280, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.31, 0.22, 0.13, 1)
+theme_override_colors/font_focus_color = Color(0.22, 0.16, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.36, 0.26, 0.16, 1)
+theme_override_colors/font_hover_color = Color(0.2, 0.14, 0.09, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxTexture_btn_focus")
 text = "Restart"

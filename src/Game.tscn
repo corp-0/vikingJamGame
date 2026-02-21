@@ -4,12 +4,11 @@
 [ext_resource type="Script" uid="uid://buafjb3yq21v2" path="res://src/GameLogic/Nodes/GodotSceneSwitcher.cs" id="2_kqvf5"]
 [ext_resource type="PackedScene" uid="uid://dsw16qclrerr3" path="res://src/Scenes/PrologueScene.tscn" id="3_h8hwv"]
 [ext_resource type="PackedScene" uid="uid://dfkuets2nxujx" path="res://src/Scenes/PlayingScene.tscn" id="4_km1yn"]
-[ext_resource type="PackedScene" path="res://src/Scenes/GameOverScene.tscn" id="5_q3fq4"]
+[ext_resource type="PackedScene" uid="uid://bu0p7jnr4e6yg" path="res://src/Scenes/GameOverScene.tscn" id="5_q3fq4"]
 
 [node name="Game" type="Node2D" unique_id=1346216071 node_paths=PackedStringArray("SceneSwitcher")]
 script = ExtResource("1_kqvf5")
 SceneSwitcher = NodePath("GodotSceneSwitcher")
-ForceInitialState = 1
 metadata/_custom_type_script = "uid://djyal22vnmgsa"
 
 [node name="GodotSceneSwitcher" type="Node" parent="." unique_id=1532306172]

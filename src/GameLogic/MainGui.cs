@@ -94,7 +94,7 @@ public partial class MainGui : CanvasLayer
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.Out);
         tween.TweenInterval(1.0f);
-        tween.TweenProperty(SuppliesLabel, "modulate:a", 0.0f, 0.5f)
+        tween.TweenProperty(SuppliesLabel, "modulate:a", 0.0f, 1f)
             .SetTrans(Tween.TransitionType.Cubic)
             .SetEase(Tween.EaseType.In);
     }
@@ -199,6 +199,7 @@ public partial class MainGui : CanvasLayer
         FoodContainer.MouseExited += OnExitHover;
         CoinContainer.MouseExited += OnExitHover;
         NameContainer.GuiInput += OnNameClicked;
+        GameResources.SuppliesCostApplied += ShowSuppliesCost;
 
         for (int i = 0; i < _slotIcons.Length; i++)
         {
@@ -222,6 +223,7 @@ public partial class MainGui : CanvasLayer
         FoodContainer.MouseExited -= OnExitHover;
         CoinContainer.MouseExited -= OnExitHover;
         NameContainer.GuiInput -= OnNameClicked;
+        GameResources.SuppliesCostApplied -= ShowSuppliesCost;
     }
 
     public override void _Notification(int what) => this.Notify(what);
