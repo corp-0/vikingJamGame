@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using VikingJamGame.Models.GameEvents.Compilation;
-using VikingJamGame.Models.GameEvents.Commands;
 using VikingJamGame.Models.GameEvents.Runtime;
 using VikingJamGame.Repositories.GameEvents;
 
@@ -23,7 +22,7 @@ public partial class GodotGameEventRepository : Node, IGameEventRepository
 
     public IReadOnlyCollection<GameEvent> All => RequireLoaded().All;
 
-    public void Reload(ICommandRegistry commands, GameEventTemplateContext? templateContext = null)
+    public void Reload(GameEventTemplateContext? templateContext = null)
     {
         var eventsDirectory = GameEventDirectoryResolver.ResolveForRuntime(
             EditorEventsResourceDirectory,
@@ -31,18 +30,15 @@ public partial class GodotGameEventRepository : Node, IGameEventRepository
 
         _innerRepository = TomlGameEventRepositoryLoader.LoadFromDirectory(
             eventsDirectory,
-            commands,
             templateContext);
     }
 
     public void ReloadFromDirectory(
         string directoryPath,
-        ICommandRegistry commands,
         GameEventTemplateContext? templateContext = null)
     {
         _innerRepository = TomlGameEventRepositoryLoader.LoadFromDirectory(
             directoryPath,
-            commands,
             templateContext);
     }
 

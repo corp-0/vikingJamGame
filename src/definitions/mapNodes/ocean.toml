@@ -3,9 +3,7 @@ Name = "Open Sea"
 Description = "Endless waves stretch to the horizon. The wind carries you forward, or astray."
 Art = "ocean.png"
 
-EventsPool = [
-    "test_event",
-]
+EventsPool = ["test_event"]
 
 [PossibleNeighbours]
 shore = 0.2

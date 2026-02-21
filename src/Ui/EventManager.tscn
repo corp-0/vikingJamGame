@@ -1,40 +1,131 @@
 [gd_scene format=3 uid="uid://b5wg7kfpi3t5a"]
 
 [ext_resource type="Script" uid="uid://cb1jsvonvw4kr" path="res://src/GameLogic/Nodes/GodotEventManager.cs" id="1_ovfqy"]
-[ext_resource type="Texture2D" uid="uid://6a06j08y7udq" path="res://resources/kenney-adventure-ui-pack/PNG/Double/banner_classic_curtain.png" id="2_dfswl"]
-[ext_resource type="Texture2D" uid="uid://busmkqiheik5h" path="res://resources/kenney-adventure-ui-pack/PNG/Double/button_brown.png" id="2_srm5p"]
+[ext_resource type="Texture2D" uid="uid://djjj52t1tejd2" path="res://resources/kenney-adventure-ui-pack/PNG/Double/panel_brown_damaged_dark.png" id="2_7vkjm"]
+[ext_resource type="Texture2D" uid="uid://chjkdy5itoekb" path="res://resources/kenney-rpg-ui-pack/PNG/panel_brown.png" id="3_panel"]
+[ext_resource type="Texture2D" uid="uid://dofolw0orvdvd" path="res://resources/kenney-rpg-ui-pack/PNG/panelInset_brown.png" id="4_inset"]
+[ext_resource type="PackedScene" uid="uid://cqae46ka2nmbe" path="res://src/Ui/OptionButton.tscn" id="5_7vkjm"]
+[ext_resource type="Texture2D" uid="uid://busmkqiheik5h" path="res://resources/kenney-adventure-ui-pack/PNG/Double/button_brown.png" id="6_btn"]
+[ext_resource type="LabelSettings" uid="uid://erl6hh8dpxlf" path="res://resources/positive_event_effect_label_settings.tres" id="7_pos"]
+[ext_resource type="LabelSettings" uid="uid://k8gfsdv2ip08" path="res://resources/negative_event_effect_label_settings.tres" id="8_neg"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vtwly"]
-content_margin_left = 14.0
-content_margin_top = 14.0
-content_margin_right = 14.0
-content_margin_bottom = 14.0
-texture = ExtResource("2_srm5p")
-texture_margin_left = 12.0
-texture_margin_top = 12.0
-texture_margin_right = 12.0
-texture_margin_bottom = 12.0
-modulate_color = Color(0.8, 0.7, 0.55, 0.95)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.55)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_srm5p"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_title_banner"]
+content_margin_left = 30.0
+content_margin_top = 16.0
+content_margin_right = 30.0
+content_margin_bottom = 24.0
+texture = ExtResource("2_7vkjm")
+texture_margin_left = 20.0
+texture_margin_top = 14.0
+texture_margin_right = 20.0
+texture_margin_bottom = 18.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 26
+font_color = Color(1, 0.95, 0.82, 1)
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_main_panel"]
 content_margin_left = 20.0
 content_margin_top = 20.0
 content_margin_right = 20.0
 content_margin_bottom = 20.0
-texture = ExtResource("2_dfswl")
+texture = ExtResource("3_panel")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.85, 0.75, 0.6, 0.97)
 
-[sub_resource type="LabelSettings" id="LabelSettings_dfswl"]
-font_size = 25
-font_color = Color(0.9506479, 0.9169338, 0.91203445, 1)
-shadow_color = Color(0, 0, 0, 0.6)
-shadow_offset = Vector2(1, 2)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_desc_inset"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+texture = ExtResource("4_inset")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+modulate_color = Color(0.75, 0.65, 0.5, 0.9)
 
-[node name="EventManager" type="CanvasLayer" unique_id=295713098]
+[sub_resource type="LabelSettings" id="LabelSettings_description"]
+font_color = Color(0.95, 0.9, 0.78, 1)
+shadow_color = Color(0, 0, 0, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_separator"]
+content_margin_top = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.85, 0.72, 0.45, 0.4)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_normal"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_pressed"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.7, 0.6, 0.45, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_hover"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.15, 1.1, 0.95, 1)
+
+[node name="EventManager" type="CanvasLayer" unique_id=295713098 node_paths=PackedStringArray("Overlay", "MainContainer", "DialogContainer", "EventTitleLabel", "EventDescriptionLabel", "DescriptionContainer", "Separator", "QuestionLabel", "OptionsContainer", "ResolutionContainer", "ResolutionEffectsContainer", "ResolutionLabel", "ContinueButton")]
 script = ExtResource("1_ovfqy")
+EventOptionButton = ExtResource("5_7vkjm")
+PositiveEffectLabelSettings = ExtResource("7_pos")
+NegativeEffectLabelSettings = ExtResource("8_neg")
+Overlay = NodePath("Overlay")
+MainContainer = NodePath("MainContainer")
+DialogContainer = NodePath("MainContainer/DialogContainer")
+EventTitleLabel = NodePath("MainContainer/DialogContainer/TitleBanner/EventTitleLabel")
+EventDescriptionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll/DescriptionMargin/EventDescriptionLabel")
+DescriptionContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel")
+Separator = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/Separator")
+QuestionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/OptionsLabel")
+OptionsContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/OptionsContainer")
+ResolutionContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer")
+ResolutionEffectsContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/EffectsContainer")
+ResolutionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel/ResolutionMargin/ResolutionLabel")
+ContinueButton = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ContinueButton")
 metadata/_custom_type_script = "uid://cb1jsvonvw4kr"
 
-[node name="Control" type="Control" parent="." unique_id=1699922342]
-layout_mode = 3
+[node name="Overlay" type="Panel" parent="." unique_id=756769707]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="MainContainer" type="CenterContainer" parent="." unique_id=49767178]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -42,99 +133,123 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="DescriptionPanel" type="Panel" parent="Control" unique_id=307091837]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -536.0
-offset_top = 83.0
-offset_right = -107.0
-offset_bottom = 360.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_vtwly")
+[node name="DialogContainer" type="VBoxContainer" parent="MainContainer" unique_id=2122501824]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -14
 
-[node name="BottomLeftPanel" type="Panel" parent="Control/DescriptionPanel" unique_id=963670234]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.56100005
-anchor_top = 0.25
-anchor_right = 0.56100005
-anchor_bottom = 0.25
-offset_left = -199.66902
-offset_top = -108.25
-offset_right = 152.33098
-offset_bottom = -46.25
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_srm5p")
+[node name="TitleBanner" type="PanelContainer" parent="MainContainer/DialogContainer" unique_id=343967807]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_title_banner")
 
-[node name="EventTitleLabel" type="Label" parent="Control/DescriptionPanel/BottomLeftPanel" unique_id=310484790]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 13.0
-offset_top = 10.0
-offset_right = -13.0
-offset_bottom = -17.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="EventTitleLabel" type="Label" parent="MainContainer/DialogContainer/TitleBanner" unique_id=310484790]
+layout_mode = 2
 text = "Event Title goes here"
-label_settings = SubResource("LabelSettings_dfswl")
+label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/DescriptionPanel" unique_id=1341820461]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="EventDescriptionLabel" type="Label" parent="Control/DescriptionPanel/MarginContainer" unique_id=698777547]
-custom_minimum_size = Vector2(24, 0)
+[node name="MainPanel" type="PanelContainer" parent="MainContainer/DialogContainer" unique_id=316613649]
+show_behind_parent = true
 layout_mode = 2
-text = "Here Goes a long ass description of the event in question, and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and so on and sn"
+theme_override_styles/panel = SubResource("StyleBoxTexture_main_panel")
+
+[node name="ContentMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel" unique_id=689709176]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ContentVBox" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin" unique_id=417015381]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DescriptionPanel" type="PanelContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=307091837]
+clip_contents = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_desc_inset")
+
+[node name="DescriptionScroll" type="ScrollContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel" unique_id=865833912]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DescriptionMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll" unique_id=967411197]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="EventDescriptionLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll/DescriptionMargin" unique_id=698777547]
+custom_minimum_size = Vector2(376, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Here goes a long description of the event in question. The raiders have arrived at a nearby village and demand tribute. What will you do? Your people look to you for guidance, their eyes filled with both fear and determination."
+label_settings = SubResource("LabelSettings_description")
 autowrap_mode = 3
 justification_flags = 171
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/DescriptionPanel" unique_id=1456200278]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.94200003
-anchor_right = 1.0
-anchor_bottom = 0.94200003
-offset_top = 0.065979004
-offset_bottom = 171.06598
-grow_horizontal = 2
-grow_vertical = 0
-metadata/_edit_group_ = true
-
-[node name="Button" type="Button" parent="Control/DescriptionPanel/VBoxContainer" unique_id=424065122]
+[node name="Separator" type="HSeparator" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=2138245034]
 layout_mode = 2
-text = "Option 1"
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxFlat_separator")
 
-[node name="Button2" type="Button" parent="Control/DescriptionPanel/VBoxContainer" unique_id=751196432]
+[node name="OptionsLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=515762776]
 layout_mode = 2
-text = "Option 1"
+text = "What will you do?"
+label_settings = SubResource("LabelSettings_description")
+horizontal_alignment = 1
 
-[node name="Button3" type="Button" parent="Control/DescriptionPanel/VBoxContainer" unique_id=701135138]
+[node name="OptionsContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=1456200278]
 layout_mode = 2
-text = "Option 1"
+theme_override_constants/separation = 6
 
-[node name="Button4" type="Button" parent="Control/DescriptionPanel/VBoxContainer" unique_id=1983171433]
+[node name="ResolutionContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=1315427724]
+visible = false
 layout_mode = 2
-text = "Option 1"
+theme_override_constants/separation = 12
 
-[node name="Button5" type="Button" parent="Control/DescriptionPanel/VBoxContainer" unique_id=865096398]
+[node name="ResolutionPanel" type="PanelContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=1121189863]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-text = "Option 1"
+theme_override_styles/panel = SubResource("StyleBoxTexture_desc_inset")
+
+[node name="ResolutionMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel" unique_id=937075073]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="ResolutionLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel/ResolutionMargin" unique_id=1983533412]
+custom_minimum_size = Vector2(376, 0)
+layout_mode = 2
+text = "You chose to fight the raiders head on. Your warriors clashed with the invaders in a fierce battle. Many fell, but the raiders were driven back."
+label_settings = SubResource("LabelSettings_description")
+autowrap_mode = 3
+justification_flags = 171
+
+[node name="EffectsContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=871805312]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ContinueButton" type="Button" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=35887787]
+custom_minimum_size = Vector2(200, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.25, 0.18, 0.1, 1)
+theme_override_colors/font_focus_color = Color(0.2, 0.14, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.1, 0.05, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_continue_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_continue_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_continue_hover")
+text = "Continue"

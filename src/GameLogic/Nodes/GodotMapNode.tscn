@@ -2,16 +2,24 @@
 
 [ext_resource type="Script" uid="uid://dpjm31fn5qxp5" path="res://src/GameLogic/Nodes/GodotMapNode.cs" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://ctg8ypby512jx" path="res://resources/map-generator-test/unknown.png" id="2_wfqli"]
+[ext_resource type="Texture2D" uid="uid://bwi8p6ha5d6n5" path="res://resources/kenney-adventure-ui-pack/PNG/Double/minimap_ring_brown_detail.png" id="3_3d185"]
 
-[node name="GodotMapNode" type="Node2D" unique_id=780701421 node_paths=PackedStringArray("Sprite", "Label", "InternalControl", "ToolTipPosition")]
+[node name="GodotMapNode" type="Node2D" unique_id=780701421 node_paths=PackedStringArray("Sprite", "CurrentNodeIndicator", "Label", "InternalControl", "ToolTipPosition")]
 script = ExtResource("1_script")
-Sprite = NodePath("Sprite2D")
+Sprite = NodePath("NodeIcon")
+CurrentNodeIndicator = NodePath("CurrentPositionIndicator")
 Label = NodePath("Control/Label")
 UnknownTexture = ExtResource("2_wfqli")
 InternalControl = NodePath("Control")
 ToolTipPosition = NodePath("Marker2D")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1325088877]
+[node name="CurrentPositionIndicator" type="Sprite2D" parent="." unique_id=1423894290]
+visible = false
+position = Vector2(-0.25000226, -0.25000226)
+scale = Vector2(0.3144531, 0.3144531)
+texture = ExtResource("3_3d185")
+
+[node name="NodeIcon" type="Sprite2D" parent="." unique_id=1325088877]
 texture = ExtResource("2_wfqli")
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=422249202]

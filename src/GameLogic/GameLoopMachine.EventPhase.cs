@@ -1,6 +1,8 @@
 using Chickensoft.LogicBlocks;
 using Godot;
 using VikingJamGame.GameLogic.Nodes;
+using VikingJamGame.Models;
+using VikingJamGame.Models.GameEvents;
 using VikingJamGame.Models.GameEvents.Runtime;
 
 namespace VikingJamGame.GameLogic;
@@ -14,25 +16,41 @@ public partial class GameLoopMachine
             public EventPhase() => this.OnEnter(() =>
             {
                 GD.Print("EventPhase");
-                GodotNavigationSession nav = Get<GodotNavigationSession>();
-
                 UpdateVisibility();
 
-                string? consecutiveVisitEventId = ResolveConsecutiveVisitEventId();
-                if (consecutiveVisitEventId is not null)
+                string? eventId = ResolveCurrentNodeEventId();
+                if (eventId is not null)
                 {
-                    GD.Print(
-                        $"Triggering consecutive-visit event '{consecutiveVisitEventId}' for kind '{nav.CurrentNode.Kind}' on streak {nav.ConsecutiveNodesOfSameType}.");
-                    // TODO: Route this event id through the in-game event presentation flow.
+                    GD.Print($"Triggering event '{eventId}' at node '{Get<GodotNavigationSession>().CurrentNode.Kind}'.");
+                    Get<GodotEventManager>().TriggerEvent(eventId);
                     return;
                 }
 
-                // TODO: trigger actual event; for now, auto-resolve
+                GD.Print("No event to trigger. Auto-resolving.");
+                Input(new Input.EventResolved(new EventResults()));
             });
 
-            // we trigger the event at the current Node, player has to resolve it
-            // and the resources amount is adjusted accordingly
-            public Transition On(in Input.EventResolved input) => To<PlanningPhase>();
+            public Transition On(in Input.EventResolved input)
+            {
+                // Apply accumulated event effects
+                GameEventContext context = BuildEventContext();
+                GameEventEvaluator evaluator = new();
+                evaluator.ApplyAll(input.Results, context);
+
+                return To<MovementCostPhase>();
+            }
+
+            private GameEventContext BuildEventContext()
+            {
+                GodotNavigationSession nav = Get<GodotNavigationSession>();
+                return new GameEventContext
+                {
+                    PlayerInfo = Get<PlayerInfo>(),
+                    GameResources = Get<GameResources>(),
+                    ItemRepository = Get<GodotItemRepository>(),
+                    CurrentNodeKind = nav.CurrentNode.Kind
+                };
+            }
         }
     }
 }

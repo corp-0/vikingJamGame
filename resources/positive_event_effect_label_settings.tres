@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://erl6hh8dpxlf"]
+
+[resource]
+font_size = 15
+font_color = Color(0.25, 0.6, 0.3, 1)
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_offset = Vector2(0, 1)

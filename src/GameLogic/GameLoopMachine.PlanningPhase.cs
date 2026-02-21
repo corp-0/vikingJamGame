@@ -25,7 +25,7 @@ public partial class GameLoopMachine
                 bool isRevisit = nav.VisitedNodeIds.Contains(input.NodeId);
                 nav.MoveTo(input.NodeId);
 
-                if (ResolveConsecutiveVisitEventId() is not null)
+                if (ResolveCurrentNodeEventId() is not null)
                 {
                     return To<EventPhase>();
                 }

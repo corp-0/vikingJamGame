@@ -1,10 +1,11 @@
 using VikingJamGame.Models;
 using VikingJamGame.Models.GameEvents;
+using VikingJamGame.TemplateUtils;
 using VikingJamGame.Models.GameEvents.Conditions;
 using VikingJamGame.Models.GameEvents.Effects;
 using VikingJamGame.Models.GameEvents.Runtime;
 using VikingJamGame.Models.GameEvents.Stats;
-using VikingJamGame.Tests.TestDoubles;
+using VikingJamGame.Repositories.Items;
 
 namespace VikingJamGame.Tests.Models.GameEvents.Runtime;
 
@@ -51,18 +52,19 @@ public sealed class GameEventOptionTests
         var gameResources = new GameResources();
         gameResources.AddFood(5);
         gameResources.AddGold(4);
-        var command = new RecordingCommand();
 
         GameEventOption option = CreateOption(
             visibilityConditions: [],
             costs: [new StatAmount(StatId.Food, 2), new StatAmount(StatId.Gold, 1)],
-            effects: [new CustomCommandEffect(command)]);
+            effects: [new StatChangeEffect(StatId.Honor, 3)]);
 
-        _evaluator.Apply(option, CreateContext(playerInfo, gameResources));
+        var context = CreateContext(playerInfo, gameResources);
+        playerInfo.SetInitialInfo("Test", BirthChoice.Boy, "", 0, 10, 0, 10, 0, 10);
+        _evaluator.Apply(option, context);
 
         Assert.Equal(3, gameResources.Food);
         Assert.Equal(3, gameResources.Gold);
-        Assert.Equal(1, command.ExecuteCalls);
+        Assert.Equal(3, playerInfo.Honor);
     }
 
     private static GameEventOption CreateOption(
@@ -74,12 +76,17 @@ public sealed class GameEventOptionTests
             DisplayText = "Option",
             ResolutionText = "Resolved",
             Order = 1,
-            DisplayCosts = true,
+            DisplayCost = true,
             VisibilityConditions = visibilityConditions,
             Costs = costs,
             Effects = effects ?? []
         };
 
     private static GameEventContext CreateContext(PlayerInfo playerInfo, GameResources gameResources) =>
-        new() { PlayerInfo = playerInfo, GameResources = gameResources };
+        new()
+        {
+            PlayerInfo = playerInfo,
+            GameResources = gameResources,
+            ItemRepository = new InMemoryItemRepository([])
+        };
 }

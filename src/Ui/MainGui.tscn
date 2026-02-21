@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://ctyyr1w0dl4k5" path="res://resources/ui-icons/coins-pile.png" id="4_knk56"]
 [ext_resource type="Texture2D" uid="uid://chjkdy5itoekb" path="res://resources/kenney-rpg-ui-pack/PNG/panel_brown.png" id="5_panel"]
 [ext_resource type="Texture2D" uid="uid://dofolw0orvdvd" path="res://resources/kenney-rpg-ui-pack/PNG/panelInset_brown.png" id="6_inset"]
+[ext_resource type="LabelSettings" uid="uid://k8gfsdv2ip08" path="res://resources/negative_event_effect_label_settings.tres" id="7_retvd"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_topbar"]
 content_margin_left = 16.0
@@ -114,7 +115,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="MainGui" type="CanvasLayer" unique_id=390611769 node_paths=PackedStringArray("PopulationLabel", "FoodLabel", "CoinLabel", "PopulationContainer", "FoodContainer", "CoinContainer", "NameLabel", "TitleLabel", "NameContainer", "StrBar", "HonorBar", "FeatsBar", "StrValue", "HonorValue", "FeatsValue")]
+[node name="MainGui" type="CanvasLayer" unique_id=390611769 node_paths=PackedStringArray("PopulationLabel", "FoodLabel", "CoinLabel", "PopulationContainer", "FoodContainer", "CoinContainer", "NameLabel", "TitleLabel", "NameContainer", "StrBar", "HonorBar", "FeatsBar", "StrValue", "HonorValue", "FeatsValue", "Slot1", "Slot2", "Slot3", "SuppliesLabel")]
 script = ExtResource("1_elvp5")
 PopulationLabel = NodePath("TopBar/Panel/MarginContainer/HBoxContainer/PopulationContainer/PopulationLabel")
 FoodLabel = NodePath("TopBar/Panel/MarginContainer/HBoxContainer/FoodContainer/FoodLabel")
@@ -131,6 +132,10 @@ FeatsBar = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/StatsPanel/St
 StrValue = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/StrRow/StrHeader/StrValue")
 HonorValue = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/HonorRow/HonorHeader/HonorValue")
 FeatsValue = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/StatsPanel/StatsMargin/StatsVBox/FeatsRow/FeatsHeader/FeatsValue")
+Slot1 = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/InventorySlots/Slot1/Icon")
+Slot2 = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/InventorySlots/Slot2/Icon")
+Slot3 = NodePath("BottomLeftPanel/MarginContainer/VBoxContainer/InventorySlots/Slot3/Icon")
+SuppliesLabel = NodePath("MarginContainer/MarginContainer/SuppliesLabel")
 metadata/_custom_type_script = "uid://6j05qwx2t0tw"
 
 [node name="TopBar" type="VBoxContainer" parent="." unique_id=1121216699]
@@ -411,3 +416,23 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_statsinset")
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="MarginContainer" type="VBoxContainer" parent="." unique_id=1947533080]
+offset_left = 1.0
+offset_top = 53.0
+offset_right = 1279.0
+offset_bottom = 95.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer" unique_id=1942765217]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 10
+
+[node name="SuppliesLabel" type="Label" parent="MarginContainer/MarginContainer" unique_id=2029443945]
+visible = false
+layout_mode = 2
+text = "The clan runs on food. Travel spent {foodLost}."
+label_settings = ExtResource("7_retvd")

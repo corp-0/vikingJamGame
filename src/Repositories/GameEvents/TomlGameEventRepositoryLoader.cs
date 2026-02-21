@@ -5,7 +5,6 @@ using System.Linq;
 using Tomlyn;
 using Tomlyn.Model;
 using Tomlyn.Syntax;
-using VikingJamGame.Models.GameEvents.Commands;
 using VikingJamGame.Models.GameEvents.Compilation;
 using VikingJamGame.Models.GameEvents.Definitions;
 using VikingJamGame.Models.GameEvents.Runtime;
@@ -17,17 +16,14 @@ public static class TomlGameEventRepositoryLoader
     public const string DEFAULT_EVENTS_DIRECTORY = "src/definitions/events";
 
     public static IGameEventRepository LoadFromDefaultDirectory(
-        ICommandRegistry commands,
         GameEventTemplateContext? templateContext = null) =>
-        LoadFromDirectory(DEFAULT_EVENTS_DIRECTORY, commands, templateContext);
+        LoadFromDirectory(DEFAULT_EVENTS_DIRECTORY, templateContext);
 
     public static IGameEventRepository LoadFromDirectory(
         string directoryPath,
-        ICommandRegistry commands,
         GameEventTemplateContext? templateContext = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
-        ArgumentNullException.ThrowIfNull(commands);
 
         var fullDirectoryPath = Path.GetFullPath(directoryPath);
         if (!Directory.Exists(fullDirectoryPath))
@@ -43,7 +39,7 @@ public static class TomlGameEventRepositoryLoader
         foreach (var eventFilePath in eventFiles)
         {
             var definition = ReadDefinition(eventFilePath);
-            var compiledEvent = GameEventCompiler.Compile(definition, commands, templateContext);
+            var compiledEvent = GameEventCompiler.Compile(definition, templateContext);
             events.Add(compiledEvent);
         }
 
@@ -122,22 +118,22 @@ public static class TomlGameEventRepositoryLoader
                     rawOption,
                     nameof(GameEventOptionDefinition.Order),
                     filePath),
-                Condition = GetOptionalString(
+                Conditions = GetOptionalStringArray(
                     rawOption,
-                    nameof(GameEventOptionDefinition.Condition),
+                    nameof(GameEventOptionDefinition.Conditions),
                     filePath),
-                Cost = GetOptionalString(
+                Costs = GetOptionalStringArray(
                     rawOption,
-                    nameof(GameEventOptionDefinition.Cost),
+                    nameof(GameEventOptionDefinition.Costs),
                     filePath),
-                DisplayCosts = GetOptionalBool(
+                DisplayCost = GetOptionalBool(
                     rawOption,
-                    nameof(GameEventOptionDefinition.DisplayCosts),
+                    nameof(GameEventOptionDefinition.DisplayCost),
                     defaultValue: false,
                     filePath),
-                CustomCommand = GetOptionalString(
+                Effects = GetOptionalStringArray(
                     rawOption,
-                    nameof(GameEventOptionDefinition.CustomCommand),
+                    nameof(GameEventOptionDefinition.Effects),
                     filePath),
                 NextEventId = GetOptionalString(
                     rawOption,
@@ -206,6 +202,37 @@ public static class TomlGameEventRepositoryLoader
 
         throw new InvalidOperationException(
             $"TOML file '{filePath}' key '{key}' must be a boolean.");
+    }
+
+    private static List<string> GetOptionalStringArray(TomlTable table, string key, string filePath)
+    {
+        if (!table.TryGetValue(key, out var rawValue))
+        {
+            return [];
+        }
+
+        if (rawValue is not TomlArray values)
+        {
+            throw new InvalidOperationException(
+                $"TOML file '{filePath}' key '{key}' must be an array.");
+        }
+
+        var result = new List<string>(values.Count);
+        foreach (var rawEntry in values)
+        {
+            if (rawEntry is not string value)
+            {
+                throw new InvalidOperationException(
+                    $"TOML file '{filePath}' key '{key}' must contain only strings.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                result.Add(value);
+            }
+        }
+
+        return result;
     }
 
     private static int GetRequiredInt(TomlTable table, string key, string filePath)

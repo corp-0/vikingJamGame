@@ -61,6 +61,9 @@ internal static class GameStateStats
         StatId.Strength => playerInfo.Strength,
         StatId.Honor => playerInfo.Honor,
         StatId.Feats => playerInfo.Feats,
+        StatId.MaxStrength => playerInfo.MaxStrength,
+        StatId.MaxHonor => playerInfo.MaxHonor,
+        StatId.MaxFeats => playerInfo.MaxFeats,
         _ => throw new ArgumentOutOfRangeException(nameof(id))
     };
 
@@ -90,6 +93,15 @@ internal static class GameStateStats
                 break;
             case StatId.Feats:
                 playerInfo.AddFeats(amount);
+                break;
+            case StatId.MaxStrength:
+                playerInfo.AddMaxStrength(amount);
+                break;
+            case StatId.MaxHonor:
+                playerInfo.AddMaxHonor(amount);
+                break;
+            case StatId.MaxFeats:
+                playerInfo.AddMaxFeats(amount);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(id));
@@ -122,6 +134,15 @@ internal static class GameStateStats
                 break;
             case StatId.Feats:
                 playerInfo.RemoveFeats(amount);
+                break;
+            case StatId.MaxStrength:
+                playerInfo.RemoveMaxStrength(amount);
+                break;
+            case StatId.MaxHonor:
+                playerInfo.RemoveMaxHonor(amount);
+                break;
+            case StatId.MaxFeats:
+                playerInfo.RemoveMaxFeats(amount);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(id));

@@ -10,7 +10,7 @@ public sealed class GameEventOption
     public required string DisplayText { get; init; }
     public required string ResolutionText { get; init; }
     public required int Order { get; init; }
-    public required bool DisplayCosts { get; init; }
+    public required bool DisplayCost { get; init; }
 
     /// <summary>All must pass for this option to be visible.</summary>
     public required IReadOnlyList<IGameEventCondition> VisibilityConditions { get; init; }

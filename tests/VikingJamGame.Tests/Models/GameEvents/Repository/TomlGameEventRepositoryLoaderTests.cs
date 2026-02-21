@@ -1,7 +1,6 @@
 using VikingJamGame.Repositories.GameEvents;
 using VikingJamGame.Models.GameEvents.Compilation;
 using VikingJamGame.TemplateUtils;
-using VikingJamGame.Tests.TestDoubles;
 
 namespace VikingJamGame.Tests.Models.GameEvents.Repository;
 
@@ -43,8 +42,7 @@ public sealed class TomlGameEventRepositoryLoaderTests
                 """);
 
             var repository = TomlGameEventRepositoryLoader.LoadFromDirectory(
-                tempDirectory,
-                new RecordingCommandRegistry());
+                tempDirectory);
 
             Assert.Equal(2, repository.All.Count);
             Assert.True(repository.TryGetById("event.start", out var start));
@@ -81,8 +79,7 @@ public sealed class TomlGameEventRepositoryLoaderTests
             InvalidOperationException exception = Assert
                 .Throws<InvalidOperationException>(() =>
                     TomlGameEventRepositoryLoader.LoadFromDirectory(
-                        tempDirectory,
-                        new RecordingCommandRegistry()));
+                        tempDirectory));
 
             Assert.Contains("points to missing NextEventId 'event.missing'", exception.Message);
         }
@@ -109,8 +106,7 @@ public sealed class TomlGameEventRepositoryLoaderTests
             InvalidOperationException exception = Assert
                 .Throws<InvalidOperationException>(() =>
                     TomlGameEventRepositoryLoader.LoadFromDirectory(
-                        tempDirectory,
-                        new RecordingCommandRegistry()));
+                        tempDirectory));
 
             Assert.Contains("missing required key 'Name'", exception.Message);
         }
@@ -142,7 +138,6 @@ public sealed class TomlGameEventRepositoryLoaderTests
 
             var repository = TomlGameEventRepositoryLoader.LoadFromDirectory(
                 tempDirectory,
-                new RecordingCommandRegistry(),
                 new GameEventTemplateContext(BirthChoice.Boy, "Bjorn", "Sea Wolf"));
 
             var gameEvent = repository.GetById("event.templated");

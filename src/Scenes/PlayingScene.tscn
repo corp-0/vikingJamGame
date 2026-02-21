@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://sc75qud55j7" path="res://src/Ui/MainGui.tscn" id="1_kh1ko"]
 [ext_resource type="Script" uid="uid://ceo8v2obykqu3" path="res://src/GameLogic/PlayingScript.cs" id="1_wp484"]
 [ext_resource type="Texture2D" uid="uid://yiry6jvel2q4" path="res://resources/kenney-cartography/Textures/parchmentBasic.png" id="2_2ekd4"]
+[ext_resource type="Script" uid="uid://v6rgodr0f82k" path="res://src/GameLogic/Nodes/GodotItemRepository.cs" id="2_8nma8"]
 [ext_resource type="Script" uid="uid://cxxgaofkj80fn" path="res://src/GameLogic/Nodes/GodotMapNodeRepository.cs" id="2_htsas"]
 [ext_resource type="Texture2D" uid="uid://bhi4nefpf3gs6" path="res://resources/map-generator-test/starting_village.png" id="3_7w6d0"]
 [ext_resource type="Script" uid="uid://7kb2xf0kvike" path="res://src/GameLogic/Nodes/GodotMapGenerator.cs" id="5_47s65"]
@@ -11,8 +12,10 @@
 [ext_resource type="Script" uid="uid://b1uo7a566ut1h" path="res://src/GameLogic/Nodes/GodotNavigationSession.cs" id="6_csjh5"]
 [ext_resource type="Script" uid="uid://ymbacbrp6t8d" path="res://src/GameLogic/Nodes/GodotMapLinkRenderer.cs" id="7_ne715"]
 [ext_resource type="PackedScene" uid="uid://dvv4f51d8aui7" path="res://src/Ui/ToolTipHandler.tscn" id="11_47s65"]
+[ext_resource type="PackedScene" uid="uid://b5wg7kfpi3t5a" path="res://src/Ui/EventManager.tscn" id="12_csjh5"]
+[ext_resource type="Script" uid="uid://bs02cf0ac4o8j" path="res://src/GameLogic/Nodes/GodotGameEventRepository.cs" id="13_evtrepo"]
 
-[node name="PlayingScene" type="Node2D" unique_id=1258357497 node_paths=PackedStringArray("Generator", "LinkRenderer", "NavigationSession", "NodeRepository", "ToolTipHandler", "Camera", "CameraController")]
+[node name="PlayingScene" type="Node2D" unique_id=1258357497 node_paths=PackedStringArray("Generator", "LinkRenderer", "NavigationSession", "NodeRepository", "ToolTipHandler", "Camera", "CameraController", "EventManager", "EventRepository", "ItemRepository")]
 script = ExtResource("1_wp484")
 Generator = NodePath("GodotMapGenerator")
 LinkRenderer = NodePath("GodotMapLinkRenderer")
@@ -21,7 +24,14 @@ NodeRepository = NodePath("GodotMapNodeRepo")
 ToolTipHandler = NodePath("ToolTipHandler")
 Camera = NodePath("Camera2D")
 CameraController = NodePath("CameraController")
+EventManager = NodePath("EventManager")
+EventRepository = NodePath("GodotGameEventRepository")
+ItemRepository = NodePath("GodotItemRepository")
 metadata/_custom_type_script = "uid://ceo8v2obykqu3"
+
+[node name="GodotItemRepository" type="Node" parent="." unique_id=1074168233]
+script = ExtResource("2_8nma8")
+metadata/_custom_type_script = "uid://v6rgodr0f82k"
 
 [node name="CameraController" type="Node" parent="." unique_id=298045096 node_paths=PackedStringArray("Camera2D", "StartingVillage")]
 script = ExtResource("1_7w6d0")
@@ -70,7 +80,7 @@ metadata/_edit_use_anchors_ = true
 [node name="StartingVillage" parent="NodesRoot" unique_id=780701421 instance=ExtResource("6_47s65")]
 position = Vector2(176, 226)
 
-[node name="Sprite2D" parent="NodesRoot/StartingVillage" index="0" unique_id=1325088877]
+[node name="NodeIcon" parent="NodesRoot/StartingVillage" index="1" unique_id=1325088877]
 texture = ExtResource("3_7w6d0")
 
 [node name="Label" parent="NodesRoot/StartingVillage/Control" parent_id_path=PackedInt32Array(780701421, 1416159286) index="0" unique_id=381531426]
@@ -79,5 +89,11 @@ text = "Start"
 [node name="MainGui" parent="." unique_id=390611769 instance=ExtResource("1_kh1ko")]
 
 [node name="ToolTipHandler" parent="." unique_id=1403373007 instance=ExtResource("11_47s65")]
+
+[node name="GodotGameEventRepository" type="Node" parent="." unique_id=482917361]
+script = ExtResource("13_evtrepo")
+metadata/_custom_type_script = "uid://bs02cf0ac4o8j"
+
+[node name="EventManager" parent="." unique_id=295713098 instance=ExtResource("12_csjh5")]
 
 [editable path="NodesRoot/StartingVillage"]

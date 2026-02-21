@@ -71,7 +71,7 @@ public sealed class InMemoryGameEventRepositoryTests
             DisplayText = "Go",
             ResolutionText = "Goes",
             Order = 1,
-            DisplayCosts = false,
+            DisplayCost = false,
             VisibilityConditions = [],
             Costs = [],
             Effects = [],

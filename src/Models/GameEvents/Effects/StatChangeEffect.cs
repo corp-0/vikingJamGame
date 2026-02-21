@@ -7,6 +7,8 @@ namespace VikingJamGame.Models.GameEvents.Effects;
 /// </summary>
 public sealed record StatChangeEffect(StatId Stat, int Amount) : IGameEventEffect
 {
+    public bool IsPositive => Amount >= 0;
+
     public void Apply(GameEventContext context)
     {
         if (Amount >= 0)
@@ -17,5 +19,11 @@ public sealed record StatChangeEffect(StatId Stat, int Amount) : IGameEventEffec
         {
             GameStateStats.Spend(context.PlayerInfo, context.GameResources, Stat, -Amount);
         }
+    }
+
+    public string GetDisplayText(GameEventContext context)
+    {
+        string sign = Amount >= 0 ? "+" : "";
+        return $"{sign}{Amount} {Stat}";
     }
 }

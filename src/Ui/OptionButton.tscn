@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://cqae46ka2nmbe"]
+
+[ext_resource type="Script" uid="uid://klhj3fmlglfd" path="res://src/GameLogic/Nodes/GodotEventOptionButton.cs" id="1_ryk34"]
+[ext_resource type="Texture2D" uid="uid://busmkqiheik5h" path="res://resources/kenney-adventure-ui-pack/PNG/Double/button_brown.png" id="1_up2xx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cost"]
+font_size = 13
+font_color = Color(0.6, 0.2, 0.15, 0.9)
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_offset = Vector2(0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("1_up2xx")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+texture = ExtResource("1_up2xx")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.7, 0.6, 0.45, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("1_up2xx")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.15, 1.1, 0.95, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_focus"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("1_up2xx")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.1, 1.05, 0.9, 1)
+
+[node name="OptionButton" type="VBoxContainer" unique_id=698498840 node_paths=PackedStringArray("OptionDescritionButton", "OptionCostLabel", "CostPanel")]
+offset_right = 206.0
+offset_bottom = 69.0
+theme_override_constants/separation = -6
+script = ExtResource("1_ryk34")
+OptionDescritionButton = NodePath("Button")
+OptionCostLabel = NodePath("Panel/CenterContainer/MarginContainer/CostLabel")
+CostPanel = NodePath("Panel")
+metadata/_custom_type_script = "uid://klhj3fmlglfd"
+
+[node name="Panel" type="Panel" parent="." unique_id=911796447]
+visible = false
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel" unique_id=1743357834]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/CenterContainer" unique_id=39479327]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="Panel/CenterContainer/MarginContainer" unique_id=1144629981]
+layout_mode = 2
+text = "-5 Strength -1 Honor -2 Wea"
+label_settings = SubResource("LabelSettings_cost")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=976371986]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.1, 1)
+theme_override_colors/font_focus_color = Color(0.2, 0.14, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.1, 0.05, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxTexture_btn_focus")
+text = "Givet them a lapdance"

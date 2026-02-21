@@ -1,6 +1,5 @@
 using System.Linq;
 using VikingJamGame.Models;
-using VikingJamGame.Models.GameEvents.Commands;
 using VikingJamGame.Models.GameEvents.Compilation;
 using VikingJamGame.Models.GameEvents.Conditions;
 using VikingJamGame.Models.GameEvents.Definitions;
@@ -8,7 +7,6 @@ using VikingJamGame.Models.GameEvents.Effects;
 using VikingJamGame.Models.GameEvents.Runtime;
 using VikingJamGame.Models.GameEvents.Stats;
 using VikingJamGame.TemplateUtils;
-using VikingJamGame.Tests.TestDoubles;
 
 namespace VikingJamGame.Tests.Models.GameEvents.Compilation;
 
@@ -35,13 +33,13 @@ public sealed class GameEventCompilerTests
                     DisplayText = "First",
                     ResolutionText = "First",
                     Order = 1,
-                    Condition = "food:1",
-                    Cost = "food:3;gold:2"
+                    Conditions = ["food:1"],
+                    Costs = ["food:3", "gold:2"]
                 }
             ]
         };
 
-        GameEvent compiled = GameEventCompiler.Compile(definition, new RecordingCommandRegistry());
+        GameEvent compiled = GameEventCompiler.Compile(definition);
 
         Assert.Equal([1, 2], compiled.Options.Select(option => option.Order).ToArray());
         GameEventOption first = compiled.Options.First();
@@ -82,45 +80,14 @@ public sealed class GameEventCompilerTests
         };
 
         InvalidOperationException exception = Assert
-            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition, new RecordingCommandRegistry()));
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
 
         Assert.Contains("duplicate option Order=1", exception.Message);
     }
 
     [Fact]
-    public void Compile_UsesCommandRegistryForCustomCommand()
+    public void Compile_HasNoEffectsWhenEffectFieldIsMissing()
     {
-        var markerCommand = new RecordingCommand();
-        var commandRegistry = new RecordingCommandRegistry(markerCommand);
-        var definition = new GameEventDefinition
-        {
-            Id = "event.command",
-            Name = "Command",
-            Description = "desc",
-            OptionDefinitions =
-            [
-                new GameEventOptionDefinition
-                {
-                    DisplayText = "Do",
-                    ResolutionText = "Done",
-                    Order = 1,
-                    CustomCommand = "ApplyDebuff:Fear"
-                }
-            ]
-        };
-
-        GameEvent compiled = GameEventCompiler.Compile(definition, commandRegistry);
-
-        Assert.Single(commandRegistry.CreatedCommands);
-        Assert.Equal(("ApplyDebuff", "Fear"), commandRegistry.CreatedCommands[0]);
-        CustomCommandEffect customEffect = Assert.IsType<CustomCommandEffect>(compiled.Options.Single().Effects.Single());
-        Assert.Same(markerCommand, customEffect.Command);
-    }
-
-    [Fact]
-    public void Compile_HasNoEffectsWhenCustomCommandIsMissing()
-    {
-        var commandRegistry = new RecordingCommandRegistry();
         var definition = new GameEventDefinition
         {
             Id = "event.noop",
@@ -137,9 +104,8 @@ public sealed class GameEventCompilerTests
             ]
         };
 
-        GameEvent compiled = GameEventCompiler.Compile(definition, commandRegistry);
+        GameEvent compiled = GameEventCompiler.Compile(definition);
 
-        Assert.Empty(commandRegistry.CreatedCommands);
         Assert.Empty(compiled.Options.Single().Effects);
     }
 
@@ -158,13 +124,13 @@ public sealed class GameEventCompilerTests
                     DisplayText = "X",
                     ResolutionText = "Y",
                     Order = 1,
-                    Condition = "mystery:2"
+                    Conditions = ["mystery:2"]
                 }
             ]
         };
 
         InvalidOperationException exception = Assert.
-            Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition, new RecordingCommandRegistry()));
+            Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
 
         Assert.Contains("unknown condition key 'mystery' in Condition", exception.Message);
     }
@@ -184,12 +150,12 @@ public sealed class GameEventCompilerTests
                     DisplayText = "Plunder",
                     ResolutionText = "Plundered",
                     Order = 1,
-                    Effect = "food:+5;honor:-1"
+                    Effects = ["food:+5", "honor:-1"]
                 }
             ]
         };
 
-        GameEvent compiled = GameEventCompiler.Compile(definition, new RecordingCommandRegistry());
+        GameEvent compiled = GameEventCompiler.Compile(definition);
 
         GameEventOption option = compiled.Options.Single();
         Assert.Equal(2, option.Effects.Count);
@@ -223,7 +189,6 @@ public sealed class GameEventCompilerTests
 
         GameEvent compiled = GameEventCompiler.Compile(
             definition,
-            new RecordingCommandRegistry(),
             templateContext);
 
         Assert.Equal("Stormborn", compiled.Name);

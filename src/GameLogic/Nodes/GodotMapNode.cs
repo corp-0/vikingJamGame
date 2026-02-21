@@ -12,6 +12,7 @@ public partial class GodotMapNode : Node2D
     private const string UNKNOWN_LABEL_TEXT = "Unknown";
 
     [Export] private Sprite2D Sprite { get; set; } = null!;
+    [Export] private Sprite2D CurrentNodeIndicator { get; set; } = null!;
     [Export] private Label Label { get; set; } = null!;
     [Export] private Texture2D UnknownTexture { get; set; } = null!;
     [Export] private Control InternalControl { get; set; } = null!;
@@ -61,8 +62,9 @@ public partial class GodotMapNode : Node2D
 
     public void SetIsCurrentNode(bool isCurrent)
     {
-        Sprite.Modulate = isCurrent ? new Color(0.4f, 1f, 0.3f) : Colors.White;
-        Sprite.Scale = isCurrent ? new Vector2(1.3f, 1.3f) : Vector2.One;
+        // Sprite.Modulate = isCurrent ? new Color(0.4f, 1f, 0.3f) : Colors.White;
+        // Sprite.Scale = isCurrent ? new Vector2(1.3f, 1.3f) : Vector2.One;
+        CurrentNodeIndicator.Visible = isCurrent;
     }
 
     private void CaptureCurrentIdentity()

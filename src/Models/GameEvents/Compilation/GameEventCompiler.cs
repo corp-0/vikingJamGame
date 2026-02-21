@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using VikingJamGame.Models.GameEvents.Commands;
-using VikingJamGame.Models.GameEvents.Conditions;
 using VikingJamGame.Models.GameEvents.Definitions;
-using VikingJamGame.Models.GameEvents.Effects;
 using VikingJamGame.Models.GameEvents.Runtime;
 
 namespace VikingJamGame.Models.GameEvents.Compilation;
@@ -13,7 +9,6 @@ public static class GameEventCompiler
 {
     public static GameEvent Compile(
         GameEventDefinition definition,
-        ICommandRegistry commands,
         GameEventTemplateContext? templateContext = null)
     {
         if (string.IsNullOrWhiteSpace(definition.Id))
@@ -25,7 +20,6 @@ public static class GameEventCompiler
             .Select(optionDefinition => CompileOption(
                 definition.Id,
                 optionDefinition,
-                commands,
                 templateContext))
             .OrderBy(option => option.Order)
             .ToList();
@@ -52,39 +46,25 @@ public static class GameEventCompiler
     private static GameEventOption CompileOption(
         string eventId,
         GameEventOptionDefinition optionDefinition,
-        ICommandRegistry commands,
         GameEventTemplateContext? templateContext)
     {
         var visibilityConditions = GameEventDefinitionParser.ParseConditionPairs(
             eventId,
             optionDefinition.Order,
-            "Condition",
-            optionDefinition.Condition);
+            "Conditions",
+            optionDefinition.Conditions);
 
         var costs = GameEventDefinitionParser.ParsePairs(
             eventId,
             optionDefinition.Order,
-            "Cost",
-            optionDefinition.Cost);
+            "Costs",
+            optionDefinition.Costs);
 
-        List<IGameEventEffect> effects = GameEventDefinitionParser.ParseEffectPairs(
+        var effects = GameEventDefinitionParser.ParseEffectPairs(
                 eventId,
                 optionDefinition.Order,
-                "Effect",
-                optionDefinition.Effect)
-            .Cast<IGameEventEffect>()
-            .ToList();
-
-        var customCommand = GameEventDefinitionParser.ParseCommand(
-            eventId,
-            optionDefinition.Order,
-            optionDefinition.CustomCommand,
-            commands);
-
-        if (customCommand is not null)
-        {
-            effects.Add(customCommand);
-        }
+                "Effects",
+                optionDefinition.Effects);
 
         return new GameEventOption
         {
@@ -95,7 +75,7 @@ public static class GameEventCompiler
                 optionDefinition.ResolutionText,
                 templateContext),
             Order = optionDefinition.Order,
-            DisplayCosts = optionDefinition.DisplayCosts,
+            DisplayCost = optionDefinition.DisplayCost,
             VisibilityConditions = visibilityConditions,
             Costs = costs,
             Effects = effects,

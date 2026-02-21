@@ -18,30 +18,10 @@ public partial class GameLoopMachine : LogicBlock<GameLoopMachine.State>
     {
         public readonly record struct DestinationSelected(int NodeId);
         public readonly record struct EventResolved(EventResults Results);
-        public readonly struct MovementCostDone;
-        public readonly struct InitializationDone;
     }
 
     public abstract partial record State : StateLogic<State>
     {
-        protected string? ResolveConsecutiveVisitEventId()
-        {
-            GodotNavigationSession nav = Get<GodotNavigationSession>();
-            GodotMapNodeRepository nodeRepository = Get<GodotMapNodeRepository>();
-
-            string currentNodeKind = nav.CurrentNode.Kind;
-            if (!nodeRepository.TryGetByKind(currentNodeKind, out MapNodeDefinition nodeDefinition))
-            {
-                GD.PushWarning(
-                    $"No map-node definition for kind '{currentNodeKind}' while resolving consecutive-visit events.");
-                return null;
-            }
-
-            return ResolveConsecutiveVisitEventId(
-                nodeDefinition.EventsOnConsecutiveVisits,
-                nav.ConsecutiveNodesOfSameType);
-        }
-
         private static string? ResolveConsecutiveVisitEventId(
             IReadOnlyDictionary<int, string> eventsByConsecutiveVisitCount,
             int consecutiveVisitCount)
@@ -53,6 +33,44 @@ public partial class GameLoopMachine : LogicBlock<GameLoopMachine.State>
             }
 
             return null;
+        }
+
+
+        /// <summary>
+        /// Resolves the event ID for the current map node, checking consecutive-visit
+        /// events first, then forced-first-event, then picking randomly from the pool.
+        /// Returns null if no event applies.
+        /// </summary>
+        protected string? ResolveCurrentNodeEventId()
+        {
+            GodotNavigationSession nav = Get<GodotNavigationSession>();
+            GodotMapNodeRepository nodeRepository = Get<GodotMapNodeRepository>();
+
+            string currentNodeKind = nav.CurrentNode.Kind;
+            if (!nodeRepository.TryGetByKind(currentNodeKind, out MapNodeDefinition nodeDefinition))
+            {
+                GD.PushWarning(
+                    $"No map-node definition for kind '{currentNodeKind}' while resolving node event.");
+                return null;
+            }
+
+            // 1. Consecutive-visit event takes priority
+            string? eventId = ResolveConsecutiveVisitEventId(
+                nodeDefinition.EventsOnConsecutiveVisits,
+                nav.ConsecutiveNodesOfSameType);
+            if (eventId is not null)
+                return eventId;
+
+            // 2. Forced first event
+            if (nodeDefinition.ForcedFirstEvent is { } forced && !string.IsNullOrWhiteSpace(forced))
+                return forced;
+
+            // 3. Random pick from pool
+            if (nodeDefinition.EventsPool.Count == 0)
+                return null;
+
+            int index = (int)(GD.Randi() % (uint)nodeDefinition.EventsPool.Count);
+            return nodeDefinition.EventsPool[index];
         }
 
         protected void UpdateVisibility()
@@ -78,8 +96,6 @@ public partial class GameLoopMachine : LogicBlock<GameLoopMachine.State>
             generator.SetCurrentNode(nav.CurrentNodeId);
             linkRenderer.RenderConnectionsForCurrentNode(nav.CurrentNodeId, visibleNodeIds);
         }
-
-
     }
 
     public override Transition GetInitialState() => To<State.Initialization>();

@@ -1,10 +1,150 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bu0p7jnr4e6yg"]
 
-[node name="GameOverScene" type="Node2D"]
+[sub_resource type="LabelSettings" id="LabelSettings_1ves8"]
+font_size = 40
 
-[node name="Label" type="Label" parent="."]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 416.0
-offset_bottom = 48.0
-text = "Game Over Scene (placeholder)"
+[node name="GameOverScene" type="Node2D" unique_id=1914835219]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1825130843]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1648922526]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect" unique_id=812426799]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer" unique_id=354951909]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="VictoryDefeatLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=267934205]
+layout_mode = 2
+text = "Victory|Defeat"
+label_settings = SubResource("LabelSettings_1ves8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DefeatReasonContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=214853225]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer" unique_id=1680654803]
+layout_mode = 2
+text = "You didn't manage to fulfill your destiny because:"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer" unique_id=1691185935]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ReasonsList" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer" unique_id=1491416148]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+alignment = 1
+
+[node name="ExampleLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=473145001]
+layout_mode = 2
+text = "- You lost all your people"
+
+[node name="ExampleLabel2" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=675593510]
+layout_mode = 2
+text = "- You had no more food to continue"
+
+[node name="ExampleLabel3" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=724183962]
+layout_mode = 2
+text = "- You died in battle"
+
+[node name="ExampleLabel4" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/DefeatReasonContainer/MarginContainer/ReasonsList" unique_id=1252146823]
+layout_mode = 2
+text = "- You were dishonored"
+
+[node name="VictoryNarrationContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=423859365]
+layout_mode = 2
+
+[node name="WinNarrationLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/VictoryNarrationContainer" unique_id=214283796]
+layout_mode = 2
+text = "You managed to win, wow you are so cool."
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=607720362]
+layout_mode = 2
+text = "Your final Stats:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=6134832]
+layout_mode = 2
+theme_override_constants/separation = 34
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1879449106]
+layout_mode = 2
+columns = 2
+
+[node name="StrLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1774042085]
+layout_mode = 2
+text = "Strength"
+
+[node name="StrValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1471703442]
+layout_mode = 2
+text = "100"
+
+[node name="HonorLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1313919884]
+layout_mode = 2
+text = "Honor"
+
+[node name="HonorValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1310877103]
+layout_mode = 2
+text = "100"
+
+[node name="FeatsLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=298272973]
+layout_mode = 2
+text = "Strength"
+
+[node name="FeatsValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer" unique_id=1536280577]
+layout_mode = 2
+text = "100"
+
+[node name="GridContainer2" type="GridContainer" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1292367993]
+layout_mode = 2
+columns = 2
+
+[node name="PopLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=493232593]
+layout_mode = 2
+text = "Population"
+
+[node name="PopValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=1790959639]
+layout_mode = 2
+text = "100"
+
+[node name="FoodLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=2138453968]
+layout_mode = 2
+text = "Food"
+
+[node name="FoodValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=161621766]
+layout_mode = 2
+text = "100"
+
+[node name="GoldLabel" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=1683705494]
+layout_mode = 2
+text = "Gold"
+
+[node name="GoldValue" type="Label" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/GridContainer2" unique_id=249018520]
+layout_mode = 2
+text = "100"
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect/MarginContainer/VBoxContainer" unique_id=1657454516]
+layout_mode = 2
+text = "Restart"

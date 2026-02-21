@@ -9,6 +9,7 @@ public sealed class GameResources
     public int Gold { get; private set; }
 
     public event Action? GameResourcesChanged;
+    public event Action<int>? SuppliesCostApplied;
 
     public void SetInitialResources(int population, int food, int gold)
     {
@@ -16,6 +17,12 @@ public sealed class GameResources
         Food = Math.Max(0, food);
         Gold = Math.Max(0, gold);
         GameResourcesChanged?.Invoke();
+    }
+
+    public void ConsumeFoodForMovement(int amount)
+    {
+        SpendFood(amount);
+        SuppliesCostApplied?.Invoke(amount);
     }
 
     public void AddFood(int amount) => Mutate(() => Food = Math.Max(0, Food + amount));

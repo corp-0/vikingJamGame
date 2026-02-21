@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using VikingJamGame.Models.GameEvents.Commands;
 using VikingJamGame.Models.GameEvents.Conditions;
 using VikingJamGame.Models.GameEvents.Effects;
 using VikingJamGame.Models.GameEvents.Stats;
@@ -28,22 +27,21 @@ internal static class GameEventDefinitionParser
     /// Parses "stat:amount" pairs where amounts must be non-negative. Used for costs.
     /// </summary>
     public static IReadOnlyList<StatAmount> ParsePairs(
-        string eventId,
+        string sourceId,
         int order,
         string fieldName,
-        string? text)
+        IReadOnlyList<string> entries)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (entries.Count == 0)
         {
             return [];
         }
 
-        var segments = text.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var parsed = new List<StatAmount>(segments.Length);
+        var parsed = new List<StatAmount>(entries.Count);
 
-        foreach (var segment in segments)
+        foreach (var entry in entries)
         {
-            var (stat, amount) = ParseStatPair(eventId, order, fieldName, segment, allowNegative: false);
+            var (stat, amount) = ParseStatPair(sourceId, order, fieldName, entry, allowNegative: false);
             parsed.Add(new StatAmount(stat, amount));
         }
 
@@ -56,29 +54,28 @@ internal static class GameEventDefinitionParser
     /// "item", "title", "node_kind" → respective condition stubs.
     /// </summary>
     public static IReadOnlyList<IGameEventCondition> ParseConditionPairs(
-        string eventId,
+        string sourceId,
         int order,
         string fieldName,
-        string? text)
+        IReadOnlyList<string> entries)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (entries.Count == 0)
         {
-            return Array.Empty<IGameEventCondition>();
+            return [];
         }
 
-        var segments = text.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var parsed = new List<IGameEventCondition>(segments.Length);
+        var parsed = new List<IGameEventCondition>(entries.Count);
 
-        foreach (var segment in segments)
+        foreach (var entry in entries)
         {
-            var pair = segment.Split(':', 2, StringSplitOptions.TrimEntries);
+            var pair = entry.Split(':', 2, StringSplitOptions.TrimEntries);
             if (pair.Length != 2)
             {
                 throw new InvalidOperationException(
-                    $"Event '{eventId}' option {order}: bad {fieldName} segment '{segment}'. Expected key:value.");
+                    $"'{sourceId}' option {order}: bad {fieldName} entry '{entry}'. Expected token:value.");
             }
 
-            parsed.Add(ParseCondition(eventId, order, fieldName, pair[0], pair[1]));
+            parsed.Add(ParseCondition(sourceId, order, fieldName, pair[0], pair[1]));
         }
 
         return parsed;
@@ -114,55 +111,93 @@ internal static class GameEventDefinitionParser
     /// <summary>
     /// Parses signed "stat:+amount" or "stat:-amount" pairs as effects. Positive = gain, negative = loss.
     /// </summary>
-    public static IReadOnlyList<StatChangeEffect> ParseEffectPairs(
-        string eventId,
+    public static IReadOnlyList<IGameEventEffect> ParseEffectPairs(
+        string sourceId,
         int order,
         string fieldName,
-        string? text)
+        IReadOnlyList<string> entries)
     {
-        if (string.IsNullOrWhiteSpace(text))
+        if (entries.Count == 0)
         {
-            return Array.Empty<StatChangeEffect>();
+            return [];
         }
 
-        var segments = text.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var parsed = new List<StatChangeEffect>(segments.Length);
+        var parsed = new List<IGameEventEffect>(entries.Count);
 
-        foreach (var segment in segments)
+        foreach (var entry in entries)
         {
-            var (stat, amount) = ParseStatPair(eventId, order, fieldName, segment, allowNegative: true);
-            parsed.Add(new StatChangeEffect(stat, amount));
+            parsed.Add(ParseEffect(sourceId, order, fieldName, entry));
         }
 
         return parsed;
     }
 
-    /// <summary>
-    /// Parses a custom command string into a <see cref="CustomCommandEffect"/>.
-    /// Returns null when no custom command is defined.
-    /// </summary>
-    public static CustomCommandEffect? ParseCommand(
-        string eventId,
+    private static IGameEventEffect ParseEffect(
+        string sourceId,
         int order,
-        string? customCommand,
-        ICommandRegistry commands)
+        string fieldName,
+        string segment)
     {
-        if (string.IsNullOrWhiteSpace(customCommand))
+        var pair = segment.Split(':', 2, StringSplitOptions.TrimEntries);
+        if (pair.Length != 2)
         {
-            return null;
+            throw new InvalidOperationException(
+                $"'{sourceId}' option {order}: bad {fieldName} segment '{segment}'. Expected token:value.");
         }
 
-        var parts = customCommand.Split(':', 2, StringSplitOptions.TrimEntries);
-        var name = parts[0];
-        var arg = parts.Length == 2 ? parts[1] : null;
+        var token = pair[0].Trim().ToLowerInvariant();
+        var value = pair[1].Trim();
 
-        if (string.IsNullOrWhiteSpace(name))
+        switch (token)
         {
-            throw new InvalidOperationException($"Event '{eventId}' option {order}: empty CustomCommand.");
-        }
+            case "event":
+                RequireNonEmpty(sourceId, order, fieldName, token, value);
+                return new TriggerEventEffect(value);
 
-        return new CustomCommandEffect(commands.Create(name, arg));
+            case "item":
+                RequireNonEmpty(sourceId, order, fieldName, token, value);
+                return new GrantItemEffect(value);
+
+            case "title":
+                RequireNonEmpty(sourceId, order, fieldName, token, value);
+                return new ChangeTitleEffect(value);
+
+            default:
+                if (TryParseStatId(token, out StatId stat))
+                {
+                    var amount = ParseSignedAmount(sourceId, order, fieldName, pair[1]);
+                    return new StatChangeEffect(stat, amount);
+                }
+
+                throw new InvalidOperationException(
+                    $"'{sourceId}' option {order}: unknown effect token '{token}' in {fieldName}.");
+        }
     }
+
+    private static void RequireNonEmpty(
+        string sourceId, int order, string fieldName, string token, string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new InvalidOperationException(
+                $"'{sourceId}' option {order}: empty value for '{token}' in {fieldName}.");
+        }
+    }
+
+    private static int ParseSignedAmount(
+        string sourceId, int order, string fieldName, string raw)
+    {
+        var trimmed = raw.Trim().TrimStart('+');
+        if (!int.TryParse(trimmed, NumberStyles.Integer, CultureInfo.InvariantCulture, out var amount))
+        {
+            throw new InvalidOperationException(
+                $"'{sourceId}' option {order}: bad amount '{raw}' in {fieldName}.");
+        }
+
+        return amount;
+    }
+
+
 
     private static (StatId stat, int amount) ParseStatPair(
         string eventId,
@@ -221,6 +256,15 @@ internal static class GameEventDefinitionParser
                 return true;
             case "feats":
                 id = StatId.Feats;
+                return true;
+            case "max_strength":
+                id = StatId.MaxStrength;
+                return true;
+            case "max_honor":
+                id = StatId.MaxHonor;
+                return true;
+            case "max_feats":
+                id = StatId.MaxFeats;
                 return true;
             default:
                 id = default;

@@ -1,5 +1,6 @@
 using Chickensoft.LogicBlocks;
 using Godot;
+using VikingJamGame.Models;
 
 namespace VikingJamGame.GameLogic;
 
@@ -7,16 +8,21 @@ public partial class GameLoopMachine
 {
     public abstract partial record State
     {
-        public record MovementCostPhase : State, IGet<Input.MovementCostDone>
+        public record MovementCostPhase : State
         {
             public MovementCostPhase() => this.OnEnter(() =>
             {
                 GD.Print("MovementCostPhase");
-                // TODO: consume movement cost (skip on first turn)
-                Input(new Input.MovementCostDone());
+                var gameResources = Get<GameResources>();
+                gameResources.ConsumeFoodForMovement(CalculateFoodConsumption());
+                To<LosingConditionCheckPhase>();
             });
 
-            public Transition On(in Input.MovementCostDone input) => To<PlanningPhase>();
+            private int CalculateFoodConsumption()
+            {
+                var gameResources = Get<GameResources>();
+                return (int)(gameResources.Population * 0.2);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using Chickensoft.LogicBlocks;
 using Godot;
+using VikingJamGame.GameLogic.Nodes;
 
 namespace VikingJamGame.GameLogic;
 
@@ -7,7 +8,7 @@ public partial class GameLoopMachine
 {
     public abstract partial record State
     {
-        public record Initialization : State, IGet<Input.InitializationDone>
+        public record Initialization : State, IGet<Input.EventResolved>
         {
             public Initialization()
             {
@@ -29,11 +30,12 @@ public partial class GameLoopMachine
 
             private void OnIntroPanFinished()
             {
-                // trigger the first event here!
-                Input(new Input.InitializationDone());
+                var eventManager = Get<GodotEventManager>();
+                string? eventId = ResolveCurrentNodeEventId();
+                if (eventId != null) eventManager.TriggerEvent(eventId);
             }
 
-            public Transition On(in Input.InitializationDone input) => To<PlanningPhase>();
+            public Transition On(in Input.EventResolved input) => To<PlanningPhase>();
         }
     }
 }

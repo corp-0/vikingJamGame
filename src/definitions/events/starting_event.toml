@@ -1,0 +1,11 @@
+﻿Id = "starting_event"
+Name = "be gay do crime"
+Description = """
+I think you should go kill that big ass serpent and shit
+"""
+
+[[OptionDefinitions]]
+DisplayText = "Ok"
+ResolutionText = "shieeeet"
+Order = 1
+

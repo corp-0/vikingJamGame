@@ -7,5 +7,8 @@ public enum StatId
     Gold,
     Strength,
     Honor,
-    Feats
+    Feats,
+    MaxStrength,
+    MaxHonor,
+    MaxFeats
 }

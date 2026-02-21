@@ -1,4 +1,5 @@
 using System;
+using VikingJamGame.Models.Items;
 using VikingJamGame.TemplateUtils;
 
 namespace VikingJamGame.Models;
@@ -14,6 +15,8 @@ public sealed class PlayerInfo
     public int MaxHonor { get; private set; }
     public int Feats { get; private set; }
     public int MaxFeats { get; private set; }
+    
+    public Inventory Inventory { get; } = new();
 
     public event Action? PlayerInfoChanged;
 
@@ -43,6 +46,17 @@ public sealed class PlayerInfo
 
     public void AddFeats(int amount) => Mutate(() => Feats = Math.Clamp(Feats + amount, 0, MaxFeats));
     public void RemoveFeats(int amount) => Mutate(() => Feats = Math.Clamp(Feats - amount, 0, MaxFeats));
+
+    public void AddMaxStrength(int amount) => Mutate(() => MaxStrength = Math.Max(0, MaxStrength + amount));
+    public void RemoveMaxStrength(int amount) => Mutate(() => MaxStrength = Math.Max(0, MaxStrength - amount));
+
+    public void AddMaxHonor(int amount) => Mutate(() => MaxHonor = Math.Max(0, MaxHonor + amount));
+    public void RemoveMaxHonor(int amount) => Mutate(() => MaxHonor = Math.Max(0, MaxHonor - amount));
+
+    public void AddMaxFeats(int amount) => Mutate(() => MaxFeats = Math.Max(0, MaxFeats + amount));
+    public void RemoveMaxFeats(int amount) => Mutate(() => MaxFeats = Math.Max(0, MaxFeats - amount));
+
+    public void SetTitle(string title) => Mutate(() => Title = title);
 
     private void Mutate(Action mutation)
     {
