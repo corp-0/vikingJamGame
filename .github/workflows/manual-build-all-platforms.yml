@@ -47,12 +47,23 @@ jobs:
           cp -R src/definitions "$EXPORT_DIR/linux/definitions"
           cp -R src/definitions "$EXPORT_DIR/macos/$EXPORT_NAME.app/Contents/MacOS/definitions"
 
-      - name: Upload artifact
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
-          name: viking-jam-game-builds
-          path: |
-            build/windows
-            build/linux
-            build/macos
+          name: viking-jam-game-windows
+          path: build/windows
+          if-no-files-found: error
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: viking-jam-game-linux
+          path: build/linux
+          if-no-files-found: error
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: viking-jam-game-macos
+          path: build/macos
           if-no-files-found: error
