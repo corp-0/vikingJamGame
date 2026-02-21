@@ -1,0 +1,58 @@
+name: Manual Build All Platforms
+
+on:
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: 4.6.1
+  PROJECT_PATH: .
+  EXPORT_NAME: VikingJamGame
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:mono-4.6.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Godot Export Templates (Mono)
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/
+          mkdir -v -p ~/.config/
+          mv /root/.config/godot ~/.config/godot
+          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+
+      - name: Build and stage definitions
+        run: |
+          rm -rf build/windows build/linux build/macos
+          mkdir -p build/windows build/linux build/macos
+
+          EXPORT_DIR="$(readlink -f build)"
+          cd "$PROJECT_PATH"
+
+          godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
+          godot --headless --verbose --export-release "Linux/BSD" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
+          godot --headless --verbose --export-release "macOS" "$EXPORT_DIR/macos/$EXPORT_NAME.app"
+
+          rm -rf "$EXPORT_DIR/windows/definitions"
+          rm -rf "$EXPORT_DIR/linux/definitions"
+          rm -rf "$EXPORT_DIR/macos/$EXPORT_NAME.app/Contents/MacOS/definitions"
+
+          cp -R src/definitions "$EXPORT_DIR/windows/definitions"
+          cp -R src/definitions "$EXPORT_DIR/linux/definitions"
+          cp -R src/definitions "$EXPORT_DIR/macos/$EXPORT_NAME.app/Contents/MacOS/definitions"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: viking-jam-game-builds
+          path: |
+            build/windows
+            build/linux
+            build/macos
+          if-no-files-found: error
