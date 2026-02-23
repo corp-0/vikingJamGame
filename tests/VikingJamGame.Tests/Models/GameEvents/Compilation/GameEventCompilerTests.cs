@@ -133,6 +133,149 @@ public sealed class GameEventCompilerTests
             Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
 
         Assert.Contains("unknown condition key 'mystery' in Condition", exception.Message);
+        Assert.Contains("Valid keys are:", exception.Message);
+        Assert.Contains("feats", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_UnknownConditionKey_SuggestsClosestKnownKey()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.badconditionkey",
+            Name = "Bad Condition Key",
+            Description = "desc",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "X",
+                    ResolutionText = "Y",
+                    Order = 1,
+                    Conditions = ["feat:2"]
+                }
+            ]
+        };
+
+        InvalidOperationException exception = Assert
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
+
+        Assert.Contains("unknown condition key 'feat' in Conditions", exception.Message);
+        Assert.Contains("Valid keys are:", exception.Message);
+        Assert.Contains("Did you mean 'feats'?", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_ThrowsWhenConditionAmountHasExplicitSign()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.badamount",
+            Name = "Bad Amount",
+            Description = "desc",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "X",
+                    ResolutionText = "Y",
+                    Order = 1,
+                    Conditions = ["strength:+3"]
+                }
+            ]
+        };
+
+        InvalidOperationException exception = Assert
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
+
+        Assert.Contains("bad amount '+3' in Conditions", exception.Message);
+        Assert.Contains("do not allow a '+' sign", exception.Message);
+        Assert.Contains("Use 'strength:3' instead", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_ThrowsWhenMultipleConditionEntriesAreInvalid()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.multiplebadconditions",
+            Name = "Multiple Bad Conditions",
+            Description = "desc",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "X",
+                    ResolutionText = "Y",
+                    Order = 1,
+                    Conditions = ["strength:+3", "honor:-5"]
+                }
+            ]
+        };
+
+        InvalidOperationException exception = Assert
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
+
+        Assert.Contains("bad amount '+3' in Conditions", exception.Message);
+        Assert.Contains("bad amount '-5' in Conditions", exception.Message);
+        Assert.Contains("cannot be negative", exception.Message);
+        Assert.Contains("Use Costs or Effects to spend or change stats", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_UnknownEffectToken_ListsValidEffectTokens()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.badeffecttoken",
+            Name = "Bad Effect Token",
+            Description = "desc",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "X",
+                    ResolutionText = "Y",
+                    Order = 1,
+                    Effects = ["strengt:+1"]
+                }
+            ]
+        };
+
+        InvalidOperationException exception = Assert
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
+
+        Assert.Contains("unknown effect token 'strengt' in Effects", exception.Message);
+        Assert.Contains("Valid effect tokens are:", exception.Message);
+        Assert.Contains("Did you mean 'strength'?", exception.Message);
+    }
+
+    [Fact]
+    public void Compile_UnknownCostStat_ListsValidStatKeys()
+    {
+        var definition = new GameEventDefinition
+        {
+            Id = "event.badcoststat",
+            Name = "Bad Cost Stat",
+            Description = "desc",
+            OptionDefinitions =
+            [
+                new GameEventOptionDefinition
+                {
+                    DisplayText = "X",
+                    ResolutionText = "Y",
+                    Order = 1,
+                    Costs = ["strengt:2"]
+                }
+            ]
+        };
+
+        InvalidOperationException exception = Assert
+            .Throws<InvalidOperationException>(() => GameEventCompiler.Compile(definition));
+
+        Assert.Contains("unknown stat 'strengt' in Costs", exception.Message);
+        Assert.Contains("Valid stat keys are:", exception.Message);
+        Assert.Contains("Did you mean 'strength'?", exception.Message);
     }
 
     [Fact]

@@ -10,6 +10,15 @@ namespace VikingJamGame.Models.GameEvents.Compilation;
 
 internal static class GameEventDefinitionParser
 {
+    private const string VALID_STAT_KEYS =
+        "population, food, gold, strength, honor, feats, max_strength, max_honor, max_feats";
+
+    private const string VALID_CONDITION_KEYS =
+        $"{VALID_STAT_KEYS}, item, title, node_kind";
+
+    private const string VALID_EFFECT_TOKENS =
+        $"event, item, title, {VALID_STAT_KEYS}";
+
     public static string ParseTemplatedText(
         string text,
         GameEventTemplateContext? templateContext = null)
@@ -38,12 +47,22 @@ internal static class GameEventDefinitionParser
         }
 
         var parsed = new List<StatAmount>(entries.Count);
+        var errors = new List<string>();
 
         foreach (var entry in entries)
         {
-            var (stat, amount) = ParseStatPair(sourceId, order, fieldName, entry, allowNegative: false);
-            parsed.Add(new StatAmount(stat, amount));
+            try
+            {
+                var (stat, amount) = ParseStatPair(sourceId, order, fieldName, entry, allowNegative: false);
+                parsed.Add(new StatAmount(stat, amount));
+            }
+            catch (InvalidOperationException exception)
+            {
+                errors.Add(exception.Message);
+            }
         }
+
+        ThrowIfAnyFieldEntryErrors(errors);
 
         return parsed;
     }
@@ -65,18 +84,29 @@ internal static class GameEventDefinitionParser
         }
 
         var parsed = new List<IGameEventCondition>(entries.Count);
+        var errors = new List<string>();
 
         foreach (var entry in entries)
         {
             var pair = entry.Split(':', 2, StringSplitOptions.TrimEntries);
             if (pair.Length != 2)
             {
-                throw new InvalidOperationException(
+                errors.Add(
                     $"'{sourceId}' option {order}: bad {fieldName} entry '{entry}'. Expected token:value.");
+                continue;
             }
 
-            parsed.Add(ParseCondition(sourceId, order, fieldName, pair[0], pair[1]));
+            try
+            {
+                parsed.Add(ParseCondition(sourceId, order, fieldName, pair[0], pair[1]));
+            }
+            catch (InvalidOperationException exception)
+            {
+                errors.Add(exception.Message);
+            }
         }
+
+        ThrowIfAnyFieldEntryErrors(errors);
 
         return parsed;
     }
@@ -95,16 +125,18 @@ internal static class GameEventDefinitionParser
             default:
                 if (TryParseStatId(key, out var stat))
                 {
-                    if (!int.TryParse(value.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var amount)
-                        || amount < 0)
+                    if (!int.TryParse(value.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out var amount))
                     {
+                        var details = DescribeInvalidConditionAmount(value, key);
                         throw new InvalidOperationException(
-                            $"Event '{eventId}' option {order}: bad amount '{value}' in {fieldName}.");
+                            $"Event '{eventId}' option {order}: bad amount '{value}' in {fieldName}. {details}");
                     }
                     return new StatThresholdCondition(stat, amount);
                 }
+
+                var unknownKeyDetails = DescribeUnknownConditionKey(key);
                 throw new InvalidOperationException(
-                    $"Event '{eventId}' option {order}: unknown condition key '{key}' in {fieldName}.");
+                    $"Event '{eventId}' option {order}: unknown condition key '{key}' in {fieldName}. {unknownKeyDetails}");
         }
     }
 
@@ -123,13 +155,96 @@ internal static class GameEventDefinitionParser
         }
 
         var parsed = new List<IGameEventEffect>(entries.Count);
+        var errors = new List<string>();
 
         foreach (var entry in entries)
         {
-            parsed.Add(ParseEffect(sourceId, order, fieldName, entry));
+            try
+            {
+                parsed.Add(ParseEffect(sourceId, order, fieldName, entry));
+            }
+            catch (InvalidOperationException exception)
+            {
+                errors.Add(exception.Message);
+            }
         }
 
+        ThrowIfAnyFieldEntryErrors(errors);
+
         return parsed;
+    }
+
+    private static void ThrowIfAnyFieldEntryErrors(IReadOnlyCollection<string> errors)
+    {
+        if (errors.Count == 0)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            string.Join(Environment.NewLine, errors));
+    }
+
+    private static string DescribeInvalidConditionAmount(string rawValue, string key)
+    {
+        var trimmedValue = rawValue.Trim();
+        var trimmedKey = key.Trim();
+
+        if (string.IsNullOrWhiteSpace(trimmedValue))
+        {
+            return $"Expected '{trimmedKey}:<non-negative integer>' (example: '{trimmedKey}:3').";
+        }
+
+        if (trimmedValue.StartsWith('+'))
+        {
+            var unsignedExample = trimmedValue.TrimStart('+');
+            return $"Conditions are thresholds and do not allow a '+' sign. Use '{trimmedKey}:{unsignedExample}' instead.";
+        }
+
+        if (trimmedValue.StartsWith('-'))
+        {
+            return "Conditions are minimum thresholds and cannot be negative. Use Costs or Effects to spend or change stats.";
+        }
+
+        return $"Expected a non-negative integer (example: '{trimmedKey}:3').";
+    }
+
+    private static string DescribeUnknownConditionKey(string rawKey)
+    {
+        var suggestion = BuildSuggestionSuffix(rawKey, "feats");
+
+        return $"Valid keys are: {VALID_CONDITION_KEYS}.{suggestion}";
+    }
+
+    private static string DescribeUnknownEffectToken(string rawToken)
+    {
+        var suggestion = BuildSuggestionSuffix(rawToken, "strength", "feats");
+        return $"Valid effect tokens are: {VALID_EFFECT_TOKENS}.{suggestion}";
+    }
+
+    private static string DescribeUnknownStatKey(string rawKey)
+    {
+        var suggestion = BuildSuggestionSuffix(rawKey, "strength", "feats");
+        return $"Valid stat keys are: {VALID_STAT_KEYS}.{suggestion}";
+    }
+
+    private static string BuildSuggestionSuffix(string rawKey, params string[] knownKeys)
+    {
+        var trimmedKey = rawKey.Trim();
+        if (string.IsNullOrWhiteSpace(trimmedKey))
+        {
+            return string.Empty;
+        }
+
+        foreach (var knownKey in knownKeys)
+        {
+            if (knownKey.StartsWith(trimmedKey, StringComparison.OrdinalIgnoreCase))
+            {
+                return $" Did you mean '{knownKey}'?";
+            }
+        }
+
+        return string.Empty;
     }
 
     private static IGameEventEffect ParseEffect(
@@ -169,8 +284,9 @@ internal static class GameEventDefinitionParser
                     return new StatChangeEffect(stat, amount);
                 }
 
+                var unknownTokenDetails = DescribeUnknownEffectToken(token);
                 throw new InvalidOperationException(
-                    $"'{sourceId}' option {order}: unknown effect token '{token}' in {fieldName}.");
+                    $"'{sourceId}' option {order}: unknown effect token '{token}' in {fieldName}. {unknownTokenDetails}");
         }
     }
 
@@ -215,8 +331,9 @@ internal static class GameEventDefinitionParser
 
         if (!TryParseStatId(pair[0], out var stat))
         {
+            var unknownStatDetails = DescribeUnknownStatKey(pair[0]);
             throw new InvalidOperationException(
-                $"Event '{eventId}' option {order}: unknown stat '{pair[0]}' in {fieldName}.");
+                $"Event '{eventId}' option {order}: unknown stat '{pair[0]}' in {fieldName}. {unknownStatDetails}");
         }
 
         var valueStr = pair[1].TrimStart('+');
