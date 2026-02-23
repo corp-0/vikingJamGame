@@ -4,4 +4,4 @@ Description = "A clear smooth orb that lets one peer into the unseen. Valuable, 
 Art = "simple_sword.png"
 IsCursed = true
 EffectsOnEquip = ["honor:-1"]
-EffectsOnUse = ["feat:+1", "honor-2"]
+EffectsOnUse = ["feats:+1", "honor:-2"]
