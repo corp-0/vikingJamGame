@@ -1,0 +1,254 @@
+[gd_scene format=3 uid="uid://bysm5lgvifwyq"]
+
+[ext_resource type="Script" uid="uid://dufd8ru6bp5bf" path="res://src/GameLogic/Debug/DebugEventDialog.cs" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://djjj52t1tejd2" path="res://resources/kenney-adventure-ui-pack/PNG/Double/panel_brown_damaged_dark.png" id="2_7vkjm"]
+[ext_resource type="Texture2D" uid="uid://chjkdy5itoekb" path="res://resources/kenney-rpg-ui-pack/PNG/panel_brown.png" id="3_panel"]
+[ext_resource type="Texture2D" uid="uid://dofolw0orvdvd" path="res://resources/kenney-rpg-ui-pack/PNG/panelInset_brown.png" id="4_inset"]
+[ext_resource type="PackedScene" uid="uid://cqae46ka2nmbe" path="res://src/Ui/OptionButton.tscn" id="5_7vkjm"]
+[ext_resource type="Texture2D" uid="uid://busmkqiheik5h" path="res://resources/kenney-adventure-ui-pack/PNG/Double/button_brown.png" id="6_btn"]
+[ext_resource type="LabelSettings" uid="uid://erl6hh8dpxlf" path="res://resources/positive_event_effect_label_settings.tres" id="7_pos"]
+[ext_resource type="LabelSettings" uid="uid://k8gfsdv2ip08" path="res://resources/negative_event_effect_label_settings.tres" id="8_neg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.55)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_title_banner"]
+content_margin_left = 30.0
+content_margin_top = 16.0
+content_margin_right = 30.0
+content_margin_bottom = 24.0
+texture = ExtResource("2_7vkjm")
+texture_margin_left = 20.0
+texture_margin_top = 14.0
+texture_margin_right = 20.0
+texture_margin_bottom = 18.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 26
+font_color = Color(1, 0.95, 0.82, 1)
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_main_panel"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+texture = ExtResource("3_panel")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.85, 0.75, 0.6, 0.97)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_desc_inset"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+texture = ExtResource("4_inset")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+modulate_color = Color(0.75, 0.65, 0.5, 0.9)
+
+[sub_resource type="LabelSettings" id="LabelSettings_description"]
+font_color = Color(0.95, 0.9, 0.78, 1)
+shadow_color = Color(0, 0, 0, 0.4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_separator"]
+content_margin_top = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.85, 0.72, 0.45, 0.4)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_normal"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_pressed"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(0.7, 0.6, 0.45, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_continue_hover"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_btn")
+texture_margin_left = 12.0
+texture_margin_top = 12.0
+texture_margin_right = 12.0
+texture_margin_bottom = 12.0
+modulate_color = Color(1.15, 1.1, 0.95, 1)
+
+[node name="DebugEventDialog" type="CanvasLayer" unique_id=820285287 node_paths=PackedStringArray("Overlay", "MainContainer", "DialogContainer", "EventTitleLabel", "EventDescriptionLabel", "DescriptionContainer", "Separator", "QuestionLabel", "OptionsContainer", "ResolutionContainer", "ResolutionEffectsContainer", "ResolutionLabel", "ContinueButton")]
+script = ExtResource("1_script")
+EventOptionButton = ExtResource("5_7vkjm")
+PositiveEffectLabelSettings = ExtResource("7_pos")
+NegativeEffectLabelSettings = ExtResource("8_neg")
+Overlay = NodePath("Overlay")
+MainContainer = NodePath("MainContainer")
+DialogContainer = NodePath("MainContainer/DialogContainer")
+EventTitleLabel = NodePath("MainContainer/DialogContainer/TitleBanner/EventTitleLabel")
+EventDescriptionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll/DescriptionMargin/EventDescriptionLabel")
+DescriptionContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel")
+Separator = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/Separator")
+QuestionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/OptionsLabel")
+OptionsContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/OptionsContainer")
+ResolutionContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer")
+ResolutionEffectsContainer = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/EffectsContainer")
+ResolutionLabel = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel/ResolutionMargin/ResolutionLabel")
+ContinueButton = NodePath("MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ContinueButton")
+
+[node name="Overlay" type="Panel" parent="." unique_id=1920874080]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="MainContainer" type="CenterContainer" parent="." unique_id=1168692189]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DialogContainer" type="VBoxContainer" parent="MainContainer" unique_id=1872675542]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -14
+
+[node name="TitleBanner" type="PanelContainer" parent="MainContainer/DialogContainer" unique_id=2007084315]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_title_banner")
+
+[node name="EventTitleLabel" type="Label" parent="MainContainer/DialogContainer/TitleBanner" unique_id=1324199692]
+layout_mode = 2
+text = "Event Title goes here"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainPanel" type="PanelContainer" parent="MainContainer/DialogContainer" unique_id=838701418]
+show_behind_parent = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_main_panel")
+
+[node name="ContentMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel" unique_id=683288739]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ContentVBox" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin" unique_id=1204479832]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DescriptionPanel" type="PanelContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=171268624]
+clip_contents = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_desc_inset")
+
+[node name="DescriptionScroll" type="ScrollContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel" unique_id=989613772]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DescriptionMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll" unique_id=1661869563]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="EventDescriptionLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/DescriptionPanel/DescriptionScroll/DescriptionMargin" unique_id=1906595662]
+custom_minimum_size = Vector2(376, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Event description"
+label_settings = SubResource("LabelSettings_description")
+autowrap_mode = 3
+justification_flags = 171
+
+[node name="Separator" type="HSeparator" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=1144354436]
+layout_mode = 2
+theme_override_constants/separation = 4
+theme_override_styles/separator = SubResource("StyleBoxFlat_separator")
+
+[node name="OptionsLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=582905189]
+layout_mode = 2
+text = "What will you do?"
+label_settings = SubResource("LabelSettings_description")
+horizontal_alignment = 1
+
+[node name="OptionsContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=601387657]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ResolutionContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox" unique_id=738664314]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResolutionPanel" type="PanelContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=1112143041]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_desc_inset")
+
+[node name="ResolutionMargin" type="MarginContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel" unique_id=681829848]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
+
+[node name="ResolutionLabel" type="Label" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer/ResolutionPanel/ResolutionMargin" unique_id=1317805074]
+custom_minimum_size = Vector2(376, 0)
+layout_mode = 2
+text = "Resolution text"
+label_settings = SubResource("LabelSettings_description")
+autowrap_mode = 3
+justification_flags = 171
+
+[node name="EffectsContainer" type="VBoxContainer" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=1291326379]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ContinueButton" type="Button" parent="MainContainer/DialogContainer/MainPanel/ContentMargin/ContentVBox/ResolutionContainer" unique_id=830440810]
+custom_minimum_size = Vector2(200, 42)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.25, 0.18, 0.1, 1)
+theme_override_colors/font_focus_color = Color(0.2, 0.14, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.25, 0.15, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.1, 0.05, 1)
+theme_override_styles/normal = SubResource("StyleBoxTexture_continue_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_continue_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_continue_hover")
+text = "Continue"

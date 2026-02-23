@@ -1,0 +1,242 @@
+[gd_scene format=3 uid="uid://comp27slqvhw0"]
+
+[ext_resource type="Script" uid="uid://dk1lt4lfp852m" path="res://src/GameLogic/Debug/EventTesterScript.cs" id="1_script"]
+[ext_resource type="Script" uid="uid://bs02cf0ac4o8j" path="res://src/GameLogic/Nodes/GodotGameEventRepository.cs" id="2_evtrepo"]
+[ext_resource type="Script" uid="uid://v6rgodr0f82k" path="res://src/GameLogic/Nodes/GodotItemRepository.cs" id="3_itemrepo"]
+[ext_resource type="PackedScene" uid="uid://bysm5lgvifwyq" path="res://src/Scenes/Debug/DebugEventDialog.tscn" id="4_dialog"]
+[ext_resource type="Script" uid="uid://cxxgaofkj80fn" path="res://src/GameLogic/Nodes/GodotMapNodeRepository.cs" id="4_kv3v1"]
+
+[node name="EventTesting" type="Node2D" unique_id=558424782 node_paths=PackedStringArray("EventRepository", "ItemRepository", "MapRepository", "EventDialog", "EventListControl", "StrengthSpin", "MaxStrengthSpin", "HonorSpin", "MaxHonorSpin", "FeatsSpin", "MaxFeatsSpin", "PopulationSpin", "FoodSpin", "GoldSpin", "NodeKindDropdown", "ReloadButton", "ItemDropdown", "GrantItemButton", "ClearInventoryButton", "InventoryLabel", "ErrorLabel")]
+script = ExtResource("1_script")
+EventRepository = NodePath("GodotGameEventRepository")
+ItemRepository = NodePath("GodotItemRepository")
+MapRepository = NodePath("GodotMapNodeRepository")
+EventDialog = NodePath("DebugEventDialog")
+EventListControl = NodePath("TesterUI/HSplit/LeftPanel/VBoxContainer/EventList")
+StrengthSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/StrengthSpin")
+MaxStrengthSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/MaxStrengthSpin")
+HonorSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/HonorSpin")
+MaxHonorSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/MaxHonorSpin")
+FeatsSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/FeatsSpin")
+MaxFeatsSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/MaxFeatsSpin")
+PopulationSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/PopulationSpin")
+FoodSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/FoodSpin")
+GoldSpin = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/GoldSpin")
+NodeKindDropdown = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid/NodeKindEdit")
+ReloadButton = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/Reload definitions")
+ItemDropdown = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/OptionButton")
+GrantItemButton = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/Button")
+ClearInventoryButton = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/Button2")
+InventoryLabel = NodePath("TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer2/InventoryLabel")
+ErrorLabel = NodePath("TesterUI/HSplit/LeftPanel/VBoxContainer/Panel/MarginContainer/Label")
+metadata/_custom_type_script = "uid://dk1lt4lfp852m"
+
+[node name="GodotGameEventRepository" type="Node" parent="." unique_id=1586683513]
+script = ExtResource("2_evtrepo")
+metadata/_custom_type_script = "uid://bs02cf0ac4o8j"
+
+[node name="GodotItemRepository" type="Node" parent="." unique_id=1284948639]
+script = ExtResource("3_itemrepo")
+metadata/_custom_type_script = "uid://v6rgodr0f82k"
+
+[node name="GodotMapNodeRepository" type="Node" parent="." unique_id=253935002]
+script = ExtResource("4_kv3v1")
+metadata/_custom_type_script = "uid://cxxgaofkj80fn"
+
+[node name="TesterUI" type="CanvasLayer" parent="." unique_id=1238907144]
+
+[node name="HSplit" type="HBoxContainer" parent="TesterUI" unique_id=1396691930]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPanel" type="PanelContainer" parent="TesterUI/HSplit" unique_id=172770668]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TesterUI/HSplit/LeftPanel" unique_id=1456009721]
+layout_mode = 2
+
+[node name="EventList" type="ItemList" parent="TesterUI/HSplit/LeftPanel/VBoxContainer" unique_id=2068773985]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Panel" type="Panel" parent="TesterUI/HSplit/LeftPanel/VBoxContainer" unique_id=180004845]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="MarginContainer" type="MarginContainer" parent="TesterUI/HSplit/LeftPanel/VBoxContainer/Panel" unique_id=560809949]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Label" type="RichTextLabel" parent="TesterUI/HSplit/LeftPanel/VBoxContainer/Panel/MarginContainer" unique_id=505134701]
+layout_mode = 2
+bbcode_enabled = true
+text = "Here is an error telling you how you wrote the thing wrong"
+fit_content = true
+
+[node name="RightPanel" type="PanelContainer" parent="TesterUI/HSplit" unique_id=1962697930]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="TesterUI/HSplit/RightPanel" unique_id=1289854992]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="CenterContainer" type="VBoxContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer" unique_id=2079834982]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer" unique_id=216161423]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer" unique_id=993556560]
+layout_mode = 2
+alignment = 1
+
+[node name="InventoryLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer2" unique_id=1552684784]
+layout_mode = 2
+text = "Current inventory:"
+
+[node name="CenterContainer2" type="CenterContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer" unique_id=867227761]
+layout_mode = 2
+
+[node name="StatsGrid" type="GridContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2" unique_id=895343918]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="StrengthLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=477425158]
+layout_mode = 2
+text = "Strength"
+
+[node name="StrengthSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=870164505]
+layout_mode = 2
+value = 10.0
+
+[node name="MaxStrengthLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=538749995]
+layout_mode = 2
+text = "Max Strength"
+
+[node name="MaxStrengthSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=2138615751]
+layout_mode = 2
+value = 20.0
+
+[node name="HonorLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=537011346]
+layout_mode = 2
+text = "Honor"
+
+[node name="HonorSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=111065377]
+layout_mode = 2
+value = 10.0
+
+[node name="MaxHonorLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1875710740]
+layout_mode = 2
+text = "Max Honor"
+
+[node name="MaxHonorSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1030156946]
+layout_mode = 2
+value = 20.0
+
+[node name="FeatsLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=517584990]
+layout_mode = 2
+text = "Feats"
+
+[node name="FeatsSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1350424717]
+layout_mode = 2
+
+[node name="MaxFeatsLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=391141602]
+layout_mode = 2
+text = "Max Feats"
+
+[node name="MaxFeatsSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=343433955]
+layout_mode = 2
+value = 10.0
+
+[node name="SepLabel1" type="HSeparator" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=978110336]
+layout_mode = 2
+
+[node name="SepLabel2" type="HSeparator" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=916046476]
+layout_mode = 2
+
+[node name="PopulationLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=89481971]
+layout_mode = 2
+text = "Population"
+
+[node name="PopulationSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1499429258]
+layout_mode = 2
+max_value = 999.0
+value = 50.0
+
+[node name="FoodLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=837032707]
+layout_mode = 2
+text = "Food"
+
+[node name="FoodSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=2060354735]
+layout_mode = 2
+max_value = 999.0
+value = 100.0
+
+[node name="GoldLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1115825795]
+layout_mode = 2
+text = "Gold"
+
+[node name="GoldSpin" type="SpinBox" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=59458047]
+layout_mode = 2
+max_value = 999.0
+value = 50.0
+
+[node name="SepLabel3" type="HSeparator" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=11588497]
+layout_mode = 2
+
+[node name="SepLabel4" type="HSeparator" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1949821182]
+layout_mode = 2
+
+[node name="NodeKindLabel" type="Label" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=1823724042]
+layout_mode = 2
+text = "Map Kind"
+
+[node name="NodeKindEdit" type="OptionButton" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/CenterContainer2/StatsGrid" unique_id=151871523]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer" unique_id=1092734812]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=241378746]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=1479769056]
+layout_mode = 2
+text = "Grant Item"
+
+[node name="Button2" type="Button" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=811859082]
+layout_mode = 2
+text = "Clear inventory"
+
+[node name="Reload definitions" type="Button" parent="TesterUI/HSplit/RightPanel/MarginContainer/CenterContainer" unique_id=51806438]
+layout_mode = 2
+text = "Reload definitions"
+
+[node name="DebugEventDialog" parent="." unique_id=1286183317 instance=ExtResource("4_dialog")]
+visible = false

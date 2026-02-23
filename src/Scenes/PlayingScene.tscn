@@ -33,6 +33,10 @@ metadata/_custom_type_script = "uid://ceo8v2obykqu3"
 script = ExtResource("2_8nma8")
 metadata/_custom_type_script = "uid://v6rgodr0f82k"
 
+[node name="GodotGameEventRepository" type="Node" parent="." unique_id=482917361]
+script = ExtResource("13_evtrepo")
+metadata/_custom_type_script = "uid://bs02cf0ac4o8j"
+
 [node name="CameraController" type="Node" parent="." unique_id=298045096 node_paths=PackedStringArray("Camera2D", "StartingVillage")]
 script = ExtResource("1_7w6d0")
 Camera2D = NodePath("../Camera2D")
@@ -89,10 +93,6 @@ text = "Start"
 [node name="MainGui" parent="." unique_id=390611769 instance=ExtResource("1_kh1ko")]
 
 [node name="ToolTipHandler" parent="." unique_id=1403373007 instance=ExtResource("11_47s65")]
-
-[node name="GodotGameEventRepository" type="Node" parent="." unique_id=482917361]
-script = ExtResource("13_evtrepo")
-metadata/_custom_type_script = "uid://bs02cf0ac4o8j"
 
 [node name="EventManager" parent="." unique_id=295713098 instance=ExtResource("12_csjh5")]
 

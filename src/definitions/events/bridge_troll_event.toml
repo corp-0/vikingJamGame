@@ -10,7 +10,7 @@ The ground shakes as a bridge troll emerges. He climbs over the edge and positio
 DisplayText = "Pay a fair toll."
 ResolutionText = "The troll is enraged by your offering. He suddenly raises a tree branch and begins cleaving at anyone in range; starting with you. It doesn’t take long for the tribe to slay the troll, but it comes at a cost."
 Order = 1
-Conditions = ["gold:5", "strength:2", "population:3"]
+Conditions = ["gold:05", "strength:2", "population:3"]
 
 [[OptionDefinitions]]
 DisplayText = "Pay a generous toll."
@@ -23,3 +23,4 @@ DisplayText = "challenge the troll"
 ResolutionText = "You challenge the troll to single combat. The troll smiles, before a tree branch comes swinging into your face. The next few seconds of your life are a blur as you struggle to fight the troll with a brutal concussion."
 Order = 3
 Conditions = ["strength:3", "honor:5"]
+Effects = ["strength:-5"]
